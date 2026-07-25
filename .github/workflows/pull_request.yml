@@ -58,24 +58,24 @@ jobs:
           COVERAGE_ARGS: ${{env.ENABLE_COVERAGE == 'true' && '--cov deltakit_compile --cov-config pyproject.toml --cov-report xml:coverage.xml' || ''}}
         run: |
           uv run --python ${{ matrix.python-version }} --no-sync pytest $COVERAGE_ARGS tests/
-      - name: Export coverage data to XML and report
-        if: ${{ env.ENABLE_COVERAGE == 'true' }}
-        run: |
-          uv run --no-sync coverage xml
-          uv run --no-sync coverage report
-      - name: Printing coverage report as a message
-        if: ${{ env.ENABLE_COVERAGE == 'true' && env.PR_FROM_FORK == 'false' && env.PR_FROM_DEPENDABOT == 'false' }}
-        uses: 5monkeys/cobertura-action@v13
-        with:
-          repo_token : ${{ secrets.GITHUB_TOKEN }}
-          path: ./coverage.xml
-          skip_covered: true
-          minimum_coverage: 95
-          fail_below_threshold: false
-          show_missing: true
-          link_missing_lines: true
-          link_missing_lines_source_dir: ''
-          only_changed_files: true
+      # - name: Export coverage data to XML and report
+      #   if: ${{ env.ENABLE_COVERAGE == 'true' }}
+      #   run: |
+      #     uv run --no-sync coverage xml
+      #     uv run --no-sync coverage report
+      # - name: Printing coverage report as a message
+      #   if: ${{ env.ENABLE_COVERAGE == 'true' && env.PR_FROM_FORK == 'false' && env.PR_FROM_DEPENDABOT == 'false' }}
+      #   uses: 5monkeys/cobertura-action@v13
+      #   with:
+      #     repo_token : ${{ secrets.GITHUB_TOKEN }}
+      #     path: ./coverage.xml
+      #     skip_covered: true
+      #     minimum_coverage: 95
+      #     fail_below_threshold: false
+      #     show_missing: true
+      #     link_missing_lines: true
+      #     link_missing_lines_source_dir: ''
+      #     only_changed_files: true
 
   # Perform static check on each deltakit-compile project package.
   static-checks:
