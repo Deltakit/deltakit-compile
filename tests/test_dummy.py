@@ -1,6 +1,5 @@
 msg = "Hello, world!"
 
 
-def dummy_test() -> None:
-    print(msg)
+def test_dummy() -> None:
     assert msg == "Hello, world!"
