@@ -31,6 +31,11 @@ classifiers = [
 ]
 dependencies = []
 
+[project.urls]
+Homepage = "https://github.com/Deltakit/deltakit"
+"Bug Tracker" = "https://github.com/Deltakit/deltakit/issues"
+Changelog = "https://github.com/Deltakit/deltakit/releases"
+
 [dependency-groups]
 test = [
   "pytest >=9.0, <10",
@@ -62,10 +67,89 @@ release = [
   "tomlkit<0.16,>=0.13",
 ]
 
+[tool.deptry]
+known_first_party = ["deltakit_explorer"]
+
+[tool.mypy]
+files = "src/**/*.py"
+# The below list of disabled checks should eventually be empty.
+disable_error_code = "arg-type,assignment,attr-defined,dict-item,index,list-item,misc,operator,override,return-value,union-attr,var-annotated"
+
+# The ldpc.mod2 stubs files contain syntax errors, and so make mypy fail earlier than expected
+# with a SyntaxError. Ignoring the whole module for mypy.
+[[tool.mypy.overrides]]
+module = ["ldpc.mod2"]
+follow_imports = "skip"
+follow_imports_for_stubs = true
+
+[[tool.mypy.overrides]]
+module = ["adjustText"]
+follow_untyped_imports = true
+
+[[tool.mypy.overrides]]
+module = ["uncertainties", "uncertainties.umath", "uncertainties.unumpy"]
+ignore_missing_imports = true
+
 [tool.pytest.ini_options]
 testpaths = ["./tests/"]
 
-[project.urls]
-Homepage = "https://github.com/Deltakit/deltakit"
-"Bug Tracker" = "https://github.com/Deltakit/deltakit/issues"
-Changelog = "https://github.com/Deltakit/deltakit/releases"
+[tool.pydoclint]
+style = 'google'
+exclude = '\.git|\.venv.*'
+# We do not want type hints to be duplicated in docstrings.
+arg-type-hints-in-docstring = false
+check-return-types = false
+check-yield-types = false
+# Ensure that Google style is used
+check-style-mismatch = true
+# Short docstrings are an open door for circumventing the linter.
+skip-checking-short-docstrings = false
+# For the moment, we have a baseline of documentation format errors. Eventually, this will
+# be removed.
+baseline = ".pydoclint_baseline.txt"
+
+[tool.typos.default]
+locale = 'en-gb'
+extend-ignore-re = [
+  # Ignore jupyter notebook cell IDs
+  "\"id\"\\s*:\\s*\"[0-9a-f]{8,}\"",
+]
+
+[tool.typos.default.extend-words]
+# Don't correct "iy" - often used in the context of "probability of an IY operation"
+iy = "iy"
+iz = "iz"
+IZ = "IZ"
+anc = "anc"
+BA = "BA"
+youre = "you're"
+distribtuion = "distribution"
+interm = "interm"
+ket = "ket"
+ND = "ND"                         # part of NDArray
+Alise = "Alise"
+DEPOLARIZE = "DEPOLARIZE"
+depolarization = "depolarization"
+depolarizing = "depolarizing"
+Authorization = "Authorization"   # Web-related field.
+color = "color"                   # Used in matplotlib and stim APIs.
+colors = "colors"
+optimize = "optimize"             # scipy.optimize
+ax = "ax"                         # Typical naming for matplotlib Axes instances.
+center = "center"
+stabilizer = "stabilizer"
+stabilizers = "stabilizers"
+synchronize = "synchronize"       # multiprocessing import
+neighbors = "neighbors"
+capitalize = "capitalize"
+labeled = "labeled"
+labeler = "labeler"
+unrealized = "unrealized"
+writeable = "writeable"           # Used in numpy APIs.
+CPY = "CPY"                       # A ruff rule identifier
+minimize = "minimize"
+Normalize = "Normalize"
+
+[tool.typos.files]
+# Paths/patterns to exclude from spell checking
+extend-exclude = ["**/LICENSE", "**/*.html"]
