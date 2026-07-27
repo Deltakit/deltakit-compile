@@ -154,6 +154,7 @@ jobs:
       - name: Make dist dir
         run: mkdir ./dist
         uses: actions/download-artifact@v8
+      - name: Recover deltakit-compile distribution files
         with:
           pattern: publish-${{ env.pkg_name }}
           path: ./dist/
