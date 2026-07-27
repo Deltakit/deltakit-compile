@@ -30,8 +30,7 @@ classifiers = [
   "Typing :: Typed",
 ]
 
-dependencies = [
-]
+dependencies = []
 
 [project.urls]
 Homepage = "https://github.com/Deltakit/deltakit"
