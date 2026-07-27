@@ -1,0 +1,27 @@
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  - package-ecosystem: "uv"
+    directories:
+      - "/"
+    schedule:
+      interval: "weekly"
+
+    commit-message:
+      prefix: fix(dependencies)
+      prefix-development: chore(dependencies)
+    # Grouping all development dependencies together, and all production libraries together.
+    groups:
+      dev-deps:
+        dependency-type: "development"
+      prod-deps:
+        dependency-type: "production"
+    # Ideally, we would like "widen" here. Even though it is explicitly written as "supported" for
+    # uv in the documentation (https://docs.github.com/en/code-security/reference/supply-chain-security/dependabot-options-reference#versioning-strategy--)
+    # it is not in practice...
+    # So sticking to the closest option we have for the moment, which is not ideal, but exists.
+    versioning-strategy: increase-if-necessary

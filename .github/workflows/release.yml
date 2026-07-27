@@ -1,0 +1,145 @@
+---
+name: Build, test, and publish stable wheels on PyPI
+permissions:
+  contents: read
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      gh_release:
+        description: 'Create a GitHub release'
+        required: false
+        default: false
+        type: boolean
+      run_tests:
+        description: 'Run tests'
+        required: false
+        default: false
+        type: boolean
+      publish_to_pypi:
+        description: 'Publish to PyPI'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  pkg_name: deltakit-compile
+
+jobs:
+  validation:
+    name: Validate version bump
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+      - name: Install release dependencies
+        run: uv sync --python 3.14 --group release
+      - name: Validate project version matches latest tag
+        run: |
+          git fetch --tags --quiet
+          latest_tag=$(git tag -l \
+            | grep -E '^v?[0-9]+\.[0-9]+\.[0-9]+$' \
+            | sort -V \
+            | tail -n1)
+          version=$(echo "$latest_tag" | sed 's/^v//')
+          uv run --no-sync python3 -m tools.check_version_match $version
+
+  build-wheels:
+    name: Build distributions
+    needs: [validation]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+      - name: Build deltakit-compile wheel
+        run: uv build --no-sources -o ./dist
+      - name: Upload wheels artefacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ env.pkg_name }}
+          path: ./dist/
+          retention-days: 1
+
+  test-wheels:
+    name: Test imports on ${{ matrix.os }}
+    needs: [build-wheels]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+    steps:
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: false
+          ignore-empty-workdir: true
+      - name: Recover deltakit-compile distribution files
+        uses: actions/download-artifact@v8
+        with:
+          pattern: ${{ env.pkg_name }}
+          path: ./dist/
+          merge-multiple: true
+      - name: Test installs in Unix systems
+        if: matrix.os != 'windows-latest'
+        run: |
+          uv venv --python ${{ matrix.python-version }}
+          uv pip install --pre dist/*.whl
+          # Test installs
+          uv run python -c "import deltakit_compile"
+      - name: Test installs on Windows OS
+        if: matrix.os == 'windows-latest'
+        shell: pwsh
+        run: |
+          uv venv --python ${{ matrix.python-version }}
+          uv pip install --pre (Get-ChildItem dist/*.whl).FullName
+          # Test installs
+          uv run python -c "import deltakit_compile"
+
+  test-sdists:
+    name: Test imports after sdists installs
+    needs: [build-wheels]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: false
+          ignore-empty-workdir: true
+      - name: Recover deltakit-compile distribution files
+        uses: actions/download-artifact@v8
+        with:
+          pattern: ${{ env.pkg_name }}
+          path: ./dist/
+          merge-multiple: true
+      - name: Test install and imports
+        run: |
+          uv venv --python 3.10
+          uv pip install --pre dist/*.tar.gz
+          uv run python -c "import deltakit_compile"
+
+  publish:
+    name: Publish Python distribution to PyPI
+    needs: [test-wheels, test-sdists]
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/${{ env.pkg_name }}
+    permissions:
+      id-token: write  # IMPORTANT: mandatory for trusted publishing
+    steps:
+      - name: Recover deltakit-compile distribution files
+        uses: actions/download-artifact@v8
+        with:
+          pattern: ${{ env.pkg_name }}
+          path: ./dist/
+      - name: Publish distribution to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1

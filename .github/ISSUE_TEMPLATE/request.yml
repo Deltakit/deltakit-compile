@@ -1,0 +1,50 @@
+name: Request
+description: Suggest an idea for this project
+title: "request: <your title here>"
+labels: ["request"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+
+        Thank you for contributing to the improvement of Deltakit. Please fill out the following sections to suggest any new feature, performance or code quality improvements.
+
+  - type: checkboxes
+    id: cla-signature
+    attributes:
+      label: Contributor License Agreement
+      description: Please confirm the following before submitting
+      options:
+        - label: A Contributor License Agreement signature is requested for any first PR contribution. Further information can be found in our [contributing guidelines](CONTRIBUTING.md).
+          required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: A description of the feature or improvement.
+      placeholder: Ex. As a user, I would like to [...]
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed solution
+      description: A description of a possible implementation.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Potential alternatives
+      description: Any alternative solutions or features you've considered.
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Add any other context about the feature request here.
