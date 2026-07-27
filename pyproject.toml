@@ -72,6 +72,11 @@ release = [
   "tomlkit<0.16,>=0.13",
 ]
 
+[tool.deptry]
+known_first_party = ["deltakit_compile"]
+
+[tool.mypy]
+files = "src/**/*.py"
 
 [tool.pytest.ini_options]
 testpaths = ["./tests/"]
