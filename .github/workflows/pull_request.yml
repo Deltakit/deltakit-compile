@@ -58,6 +58,7 @@ jobs:
           COVERAGE_ARGS: ${{env.ENABLE_COVERAGE == 'true' && '--cov deltakit_compile --cov-config pyproject.toml --cov-report xml:coverage.xml' || ''}}
         run: |
           uv run --python ${{ matrix.python-version }} --no-sync pytest $COVERAGE_ARGS tests/
+      # Temporary disabling as it makes CI fail.
       # - name: Export coverage data to XML and report
       #   if: ${{ env.ENABLE_COVERAGE == 'true' }}
       #   run: |
