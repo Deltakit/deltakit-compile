@@ -72,9 +72,6 @@ release = [
   "tomlkit<0.16,>=0.13",
 ]
 
-[tool.deptry]
-known_first_party = ["deltakit_explorer"]
-
 [tool.mypy]
 files = "src/**/*.py"
 # The below list of disabled checks should eventually be empty.
