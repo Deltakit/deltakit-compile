@@ -87,7 +87,7 @@ jobs:
       - name: Test install and imports
         run: |
           uv venv --python 3.10
-          uv pip install --pre dist/*.tar.gz --find-links ./dist/
+          uv pip install --pre dist/*.tar.gz
           uv run python -c "import deltakit_compile"
 
   set-pre-version:
