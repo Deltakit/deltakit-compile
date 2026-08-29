@@ -52,7 +52,7 @@ test = [
 ]
 lint = [
   "mypy>=1.17,<3.0",
-  "ruff==0.16.0",
+  "ruff==0.16.4",
   "typos >=1.34, <2",
   "deptry>=0.23,<0.26",
   "pydoclint>=0.9,<0.10",
@@ -63,7 +63,7 @@ dev = [
   { include-group = "lint" },
   { include-group = "security" },
   "pre-commit >=4.2, <5",
-  "validate-pyproject >=0.24.1,<0.26",
+  "validate-pyproject>=0.24.1,<0.27",
 ]
 release = [
   "python-semantic-release >=10.6.1, <11",
