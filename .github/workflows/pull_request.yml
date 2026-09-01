@@ -16,7 +16,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Install uv
         uses: astral-sh/setup-uv@v7
@@ -60,6 +60,9 @@ jobs:
         dependency-resolution: ['highest', 'lowest-direct']
     env:
       COVERAGE: ${{ (matrix.python-version == '3.10') && (matrix.dependency-resolution == 'highest') }}
+      # See https://github.com/orgs/community/discussions/25217
+      PR_FROM_FORK: ${{ github.event.pull_request.head.repo.full_name != github.repository }}
+      PR_FROM_DEPENDABOT: ${{ startsWith(github.head_ref, 'dependabot/' )}}
     continue-on-error: ${{ matrix.python-version == 3.14 }}
     name: tests (${{ matrix.python-version }}, ${{matrix.dependency-resolution}})
     runs-on: ubuntu-latest
@@ -105,7 +108,7 @@ jobs:
           uv run --no-sync coverage report
 
       - name: Collecting coverage
-        if: ${{env.COVERAGE == 'true' && github.event_name == 'pull_request'}}
+        if: ${{ env.COVERAGE == 'true' && env.PR_FROM_FORK == 'false' && env.PR_FROM_DEPENDABOT == 'false' }}
         uses: 5monkeys/cobertura-action@v13
         with:
           repo_token : ${{ secrets.GITHUB_TOKEN }}
