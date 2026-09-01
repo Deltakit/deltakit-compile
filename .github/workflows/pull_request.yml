@@ -21,26 +21,6 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v7
 
-      - name: Set version in pyproject.toml to generated dev version
-        run: |
-          git config --global --add safe.directory /__w/deltakit_compile/deltakit_compile
-          COMMIT_HASH=$(git rev-parse --short HEAD)
-          SECS_SINCE_EPOCH=$(date +%s)
-
-          # LATEST_VERSION=$(pip index versions "deltakit-compile" \
-          #  | grep -Eo 'Available versions:.*' \
-          #  | sed -E 's/Available versions: //; s/,//g' \
-          #  | awk '{print $1}')
-          LATEST_VERSION=0.0.1
-          echo "Latest version: $LATEST_VERSION"
-
-          IFS='.' read -r major minor patch suffix <<< "$LATEST_VERSION"
-          patch=$((patch + 1))
-          new_version="$major.$minor.$patch.dev$SECS_SINCE_EPOCH+g$COMMIT_HASH"
-          echo "New dev version: $new_version"
-
-          sed -E -i "s/^version = \".*\"/version = \"$new_version\"/g" "pyproject.toml"
-
       - name: Build deltakit-compile
         run: uv build
 
