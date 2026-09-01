@@ -4,13 +4,13 @@
 
 ## Installation 
 
-### With `pip`
+### With `pip`
 
 ```
 python -m pip install deltakit-compile
 ```
 
-### With `uv` 
+### With `uv`
 
 ```
 uv pip install deltakit-compile
