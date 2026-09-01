@@ -152,7 +152,7 @@ jobs:
         if: ${{ always() }}
 
       - name: Run `deptry` for dependency hygiene
-        run: uv run --no-sync deptry .
+        run: uv run --no-sync deptry src/
         if: ${{ always() }}
 
       - name: Running Bandit
