@@ -1,0 +1,7 @@
+# RUN: python examples/log_asm_api/quantum_memory.py -O %t
+# RUN: filecheck %s --input-file %t
+# XFAIL: *
+
+# TODO: Fill this out and remove xfail once the logical assembler produces real output
+
+# CHECK: OBSERVABLE_INCLUDE

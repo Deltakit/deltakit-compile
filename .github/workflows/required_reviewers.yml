@@ -1,3 +1,4 @@
+
 name: Required Reviewers
 
 on:
@@ -24,7 +25,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_IS_DRAFT: ${{ github.event.pull_request.draft }}
         run: |
-          if python tools/check_reviewers.py; then
+          if python .github/workflows/scripts/check_reviewers.py; then
             echo "is_approved=true" >> $GITHUB_OUTPUT
           else
             if [ $? == 1 ]; then

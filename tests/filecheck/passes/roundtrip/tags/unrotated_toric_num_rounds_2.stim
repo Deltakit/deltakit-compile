@@ -1,0 +1,216 @@
+# RUN: deltakit_compile deltakit-stim parse %s -O %t
+# RUN: deltakit_compile compile-passes %t -t -O %t
+# RUN: deltakit_compile deltakit-stim print %t -O %t
+# RUN: filecheck %s --input-file %t
+
+QUBIT_COORDS(4, 0) 0
+QUBIT_COORDS(3, 4) 1
+QUBIT_COORDS(4, 3) 2
+QUBIT_COORDS(3, 1) 3
+QUBIT_COORDS(5, 4) 4
+QUBIT_COORDS(5, 1) 5
+QUBIT_COORDS(0, 2) 6
+QUBIT_COORDS(0, 5) 7
+QUBIT_COORDS(2, 2) 8
+QUBIT_COORDS(1, 0) 9
+QUBIT_COORDS(2, 5) 10
+QUBIT_COORDS(1, 3) 11
+QUBIT_COORDS(4, 2) 12
+QUBIT_COORDS(3, 0) 13
+QUBIT_COORDS(4, 5) 14
+QUBIT_COORDS(3, 3) 15
+QUBIT_COORDS(5, 0) 16
+QUBIT_COORDS(5, 3) 17
+QUBIT_COORDS(0, 1) 18
+QUBIT_COORDS(2, 4) 19
+QUBIT_COORDS(1, 2) 20
+QUBIT_COORDS(0, 4) 21
+QUBIT_COORDS(2, 1) 22
+QUBIT_COORDS(1, 5) 23
+QUBIT_COORDS(3, 2) 24
+QUBIT_COORDS(4, 1) 25
+QUBIT_COORDS(3, 5) 26
+QUBIT_COORDS(5, 2) 27
+QUBIT_COORDS(4, 4) 28
+QUBIT_COORDS(5, 5) 29
+QUBIT_COORDS(0, 0) 30
+QUBIT_COORDS(1, 1) 31
+QUBIT_COORDS(0, 3) 32
+QUBIT_COORDS(2, 0) 33
+QUBIT_COORDS(1, 4) 34
+QUBIT_COORDS(2, 3) 35
+R 28 15 34 30 23 33 9 6 8 24 1 0 4 21 11 29 26 12 13 5 16 3 31 27 19 20 17
+RX 25 2 22 7 10 18 35 32 14
+TICK
+CX 14 0 5 16 35 19 26 1 2 28 29 4 10 33 3 13 18 6 11 20 7 30 31 9 22 8 15 24 25 12 17 27 32 21 23 34
+TICK
+CX 0 16 18 5 19 1 14 26 8 24 2 15 33 13 25 3 28 4 7 29 6 20 35 11 30 9 22 31 21 34 10 23 12 27 32 17
+TICK
+CX 0 13 25 5 28 1 14 29 12 24 2 17 33 9 22 3 21 4 7 23 6 27 32 11 8 20 35 15 19 34 10 26 30 16 18 31
+TICK
+CX 25 0 5 27 35 8 15 1 2 12 17 4 22 33 3 24 32 6 11 34 7 21 23 9 10 19 26 13 14 28 29 16 18 30 31 20
+TICK
+MX 25 14 2 22 7 32 35 10 18
+M 13 1 24 9 4 27 20 34 16
+TICK
+DETECTOR[stabiliser=Z](3, 0) rec[-9]
+DETECTOR[stabiliser=Z](3, 4) rec[-8]
+DETECTOR[stabiliser=Z](3, 2) rec[-7]
+DETECTOR[stabiliser=Z](1, 0) rec[-6]
+DETECTOR[stabiliser=Z](5, 4) rec[-5]
+DETECTOR[stabiliser=Z](5, 2) rec[-4]
+DETECTOR[stabiliser=Z](1, 2) rec[-3]
+DETECTOR[stabiliser=Z](1, 4) rec[-2]
+DETECTOR[stabiliser=Z](5, 0) rec[-1]
+CX 25 0 5 27 35 8 15 1 2 12 17 4 22 33 3 24 32 6 11 34 7 21 23 9 10 19 26 13 14 28 29 16 18 30 31 20
+TICK
+CX 0 13 25 5 28 1 14 29 12 24 2 17 33 9 22 3 21 4 7 23 6 27 32 11 8 20 35 15 19 34 10 26 30 16 18 31
+TICK
+CX 0 16 18 5 19 1 14 26 8 24 2 15 33 13 25 3 28 4 7 29 6 20 35 11 30 9 22 31 21 34 10 23 12 27 32 17
+TICK
+CX 14 0 5 16 35 19 26 1 2 28 29 4 10 33 3 13 18 6 11 20 7 30 31 9 22 8 15 24 25 12 17 27 32 21 23 34
+TICK
+M 19
+MX 35
+M 1 6
+MX 7
+M 11 27
+MX 10
+M 4 0
+MX 2
+M 9 31 8
+MX 25
+M 23 20 12 21 5 33 34
+MX 18
+M 3 24 26 15
+MX 22
+M 29 30
+MX 32
+M 17 16 13 28
+MX 14
+DETECTOR[stabiliser=Z](3, 0) rec[-27] rec[-16] rec[-13] rec[-45] rec[-11] rec[-3]
+DETECTOR[stabiliser=Z](3, 4) rec[-44] rec[-11] rec[-2] rec[-10] rec[-36] rec[-34]
+DETECTOR[stabiliser=Z](3, 2) rec[-23] rec[-19] rec[-13] rec[-12] rec[-43] rec[-10]
+DETECTOR[stabiliser=Z](1, 0) rec[-25] rec[-24] rec[-21] rec[-16] rec[-42] rec[-7]
+DETECTOR[stabiliser=Z](5, 4) rec[-28] rec[-18] rec[-41] rec[-8] rec[-5] rec[-2]
+DETECTOR[stabiliser=Z](5, 2) rec[-30] rec[-19] rec[-17] rec[-40] rec[-5] rec[-33]
+DETECTOR[stabiliser=Z](1, 2) rec[-31] rec[-24] rec[-23] rec[-20] rec[-39] rec[-33]
+DETECTOR[stabiliser=Z](1, 4) rec[-31] rec[-21] rec[-18] rec[-15] rec[-38] rec[-36]
+DETECTOR[stabiliser=Z](5, 0) rec[-27] rec[-17] rec[-8] rec[-7] rec[-37] rec[-4]
+DETECTOR[stabiliser=Z](3, 0) rec[-3]
+DETECTOR[stabiliser=Z](3, 4) rec[-34]
+DETECTOR[stabiliser=Z](3, 2) rec[-12]
+DETECTOR[stabiliser=Z](1, 0) rec[-25]
+DETECTOR[stabiliser=Z](5, 4) rec[-28]
+DETECTOR[stabiliser=Z](5, 2) rec[-30]
+DETECTOR[stabiliser=Z](1, 2) rec[-20]
+DETECTOR[stabiliser=Z](1, 4) rec[-15]
+DETECTOR[stabiliser=Z](5, 0) rec[-4]
+OBSERVABLE_INCLUDE(0) rec[-31] rec[-10] rec[-8] rec[-7] rec[-2] rec[-33]
+OBSERVABLE_INCLUDE(1) rec[-27] rec[-23] rec[-21] rec[-19] rec[-18] rec[-16] rec[-10] rec[-5] rec[-2]
+
+# CHECK:       QUBIT_COORDS(4, 0) 0
+# CHECK-NEXT:  QUBIT_COORDS(3, 4) 1
+# CHECK-NEXT:  QUBIT_COORDS(4, 3) 2
+# CHECK-NEXT:  QUBIT_COORDS(3, 1) 3
+# CHECK-NEXT:  QUBIT_COORDS(5, 4) 4
+# CHECK-NEXT:  QUBIT_COORDS(5, 1) 5
+# CHECK-NEXT:  QUBIT_COORDS(0, 2) 6
+# CHECK-NEXT:  QUBIT_COORDS(0, 5) 7
+# CHECK-NEXT:  QUBIT_COORDS(2, 2) 8
+# CHECK-NEXT:  QUBIT_COORDS(1, 0) 9
+# CHECK-NEXT:  QUBIT_COORDS(2, 5) 10
+# CHECK-NEXT:  QUBIT_COORDS(1, 3) 11
+# CHECK-NEXT:  QUBIT_COORDS(4, 2) 12
+# CHECK-NEXT:  QUBIT_COORDS(3, 0) 13
+# CHECK-NEXT:  QUBIT_COORDS(4, 5) 14
+# CHECK-NEXT:  QUBIT_COORDS(3, 3) 15
+# CHECK-NEXT:  QUBIT_COORDS(5, 0) 16
+# CHECK-NEXT:  QUBIT_COORDS(5, 3) 17
+# CHECK-NEXT:  QUBIT_COORDS(0, 1) 18
+# CHECK-NEXT:  QUBIT_COORDS(2, 4) 19
+# CHECK-NEXT:  QUBIT_COORDS(1, 2) 20
+# CHECK-NEXT:  QUBIT_COORDS(0, 4) 21
+# CHECK-NEXT:  QUBIT_COORDS(2, 1) 22
+# CHECK-NEXT:  QUBIT_COORDS(1, 5) 23
+# CHECK-NEXT:  QUBIT_COORDS(3, 2) 24
+# CHECK-NEXT:  QUBIT_COORDS(4, 1) 25
+# CHECK-NEXT:  QUBIT_COORDS(3, 5) 26
+# CHECK-NEXT:  QUBIT_COORDS(5, 2) 27
+# CHECK-NEXT:  QUBIT_COORDS(4, 4) 28
+# CHECK-NEXT:  QUBIT_COORDS(5, 5) 29
+# CHECK-NEXT:  QUBIT_COORDS(0, 0) 30
+# CHECK-NEXT:  QUBIT_COORDS(1, 1) 31
+# CHECK-NEXT:  QUBIT_COORDS(0, 3) 32
+# CHECK-NEXT:  QUBIT_COORDS(2, 0) 33
+# CHECK-NEXT:  QUBIT_COORDS(1, 4) 34
+# CHECK-NEXT:  QUBIT_COORDS(2, 3) 35
+# CHECK-NEXT:  R 28 15 34 30 23 33 9 6 8 24 1 0 4 21 11 29 26 12 13 5 16 3 31 27 19 20 17
+# CHECK-NEXT:  RX 25 2 22 7 10 18 35 32 14
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CX 14 0 5 16 35 19 26 1 2 28 29 4 10 33 3 13 18 6 11 20 7 30 31 9 22 8 15 24 25 12 17 27 32 21 23 34
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CX 0 16 18 5 19 1 14 26 8 24 2 15 33 13 25 3 28 4 7 29 6 20 35 11 30 9 22 31 21 34 10 23 12 27 32 17
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CX 0 13 25 5 28 1 14 29 12 24 2 17 33 9 22 3 21 4 7 23 6 27 32 11 8 20 35 15 19 34 10 26 30 16 18 31
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CX 25 0 5 27 35 8 15 1 2 12 17 4 22 33 3 24 32 6 11 34 7 21 23 9 10 19 26 13 14 28 29 16 18 30 31 20
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  MX 25 14 2 22 7 32 35 10 18
+# CHECK-NEXT:  M 13 1 24 9 4 27 20 34 16
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  DETECTOR[stabiliser=Z](3, 0) rec[-9]
+# CHECK-NEXT:  DETECTOR[stabiliser=Z](3, 4) rec[-8]
+# CHECK-NEXT:  DETECTOR[stabiliser=Z](3, 2) rec[-7]
+# CHECK-NEXT:  DETECTOR[stabiliser=Z](1, 0) rec[-6]
+# CHECK-NEXT:  DETECTOR[stabiliser=Z](5, 4) rec[-5]
+# CHECK-NEXT:  DETECTOR[stabiliser=Z](5, 2) rec[-4]
+# CHECK-NEXT:  DETECTOR[stabiliser=Z](1, 2) rec[-3]
+# CHECK-NEXT:  DETECTOR[stabiliser=Z](1, 4) rec[-2]
+# CHECK-NEXT:  DETECTOR[stabiliser=Z](5, 0) rec[-1]
+# CHECK-NEXT:  CX 25 0 5 27 35 8 15 1 2 12 17 4 22 33 3 24 32 6 11 34 7 21 23 9 10 19 26 13 14 28 29 16 18 30 31 20
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CX 0 13 25 5 28 1 14 29 12 24 2 17 33 9 22 3 21 4 7 23 6 27 32 11 8 20 35 15 19 34 10 26 30 16 18 31
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CX 0 16 18 5 19 1 14 26 8 24 2 15 33 13 25 3 28 4 7 29 6 20 35 11 30 9 22 31 21 34 10 23 12 27 32 17
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CX 14 0 5 16 35 19 26 1 2 28 29 4 10 33 3 13 18 6 11 20 7 30 31 9 22 8 15 24 25 12 17 27 32 21 23 34
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  M 19
+# CHECK-NEXT:  MX 35
+# CHECK-NEXT:  M 1 6
+# CHECK-NEXT:  MX 7
+# CHECK-NEXT:  M 11 27
+# CHECK-NEXT:  MX 10
+# CHECK-NEXT:  M 4 0
+# CHECK-NEXT:  MX 2
+# CHECK-NEXT:  M 9 31 8
+# CHECK-NEXT:  MX 25
+# CHECK-NEXT:  M 23 20 12 21 5 33 34
+# CHECK-NEXT:  MX 18
+# CHECK-NEXT:  M 3 24 26 15
+# CHECK-NEXT:  MX 22
+# CHECK-NEXT:  M 29 30
+# CHECK-NEXT:  MX 32
+# CHECK-NEXT:  M 17 16 13 28
+# CHECK-NEXT:  MX 14
+# CHECK-NEXT:  DETECTOR[stabiliser=Z](3, 0) rec[-27] rec[-16] rec[-13] rec[-45] rec[-11] rec[-3]
+# CHECK-NEXT:  DETECTOR[stabiliser=Z](3, 4) rec[-44] rec[-11] rec[-2] rec[-10] rec[-36] rec[-34]
+# CHECK-NEXT:  DETECTOR[stabiliser=Z](3, 2) rec[-23] rec[-19] rec[-13] rec[-12] rec[-43] rec[-10]
+# CHECK-NEXT:  DETECTOR[stabiliser=Z](1, 0) rec[-25] rec[-24] rec[-21] rec[-16] rec[-42] rec[-7]
+# CHECK-NEXT:  DETECTOR[stabiliser=Z](5, 4) rec[-28] rec[-18] rec[-41] rec[-8] rec[-5] rec[-2]
+# CHECK-NEXT:  DETECTOR[stabiliser=Z](5, 2) rec[-30] rec[-19] rec[-17] rec[-40] rec[-5] rec[-33]
+# CHECK-NEXT:  DETECTOR[stabiliser=Z](1, 2) rec[-31] rec[-24] rec[-23] rec[-20] rec[-39] rec[-33]
+# CHECK-NEXT:  DETECTOR[stabiliser=Z](1, 4) rec[-31] rec[-21] rec[-18] rec[-15] rec[-38] rec[-36]
+# CHECK-NEXT:  DETECTOR[stabiliser=Z](5, 0) rec[-27] rec[-17] rec[-8] rec[-7] rec[-37] rec[-4]
+# CHECK-NEXT:  DETECTOR[stabiliser=Z](3, 0) rec[-3]
+# CHECK-NEXT:  DETECTOR[stabiliser=Z](3, 4) rec[-34]
+# CHECK-NEXT:  DETECTOR[stabiliser=Z](3, 2) rec[-12]
+# CHECK-NEXT:  DETECTOR[stabiliser=Z](1, 0) rec[-25]
+# CHECK-NEXT:  DETECTOR[stabiliser=Z](5, 4) rec[-28]
+# CHECK-NEXT:  DETECTOR[stabiliser=Z](5, 2) rec[-30]
+# CHECK-NEXT:  DETECTOR[stabiliser=Z](1, 2) rec[-20]
+# CHECK-NEXT:  DETECTOR[stabiliser=Z](1, 4) rec[-15]
+# CHECK-NEXT:  DETECTOR[stabiliser=Z](5, 0) rec[-4]
+# CHECK-NEXT:  OBSERVABLE_INCLUDE(0) rec[-31] rec[-10] rec[-8] rec[-7] rec[-2] rec[-33]
+# CHECK-NEXT:  OBSERVABLE_INCLUDE(1) rec[-27] rec[-23] rec[-21] rec[-19] rec[-18] rec[-16] rec[-10] rec[-5] rec[-2]

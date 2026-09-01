@@ -1,0 +1,878 @@
+# RUN: deltakit_compile deltakit-stim parse %s -O %t
+# RUN: deltakit_compile compile-passes %t -t -O %t
+# RUN: deltakit_compile deltakit-stim print %t -O %t
+# RUN: filecheck %s --input-file %t
+
+QUBIT_COORDS(3, 1) 0
+QUBIT_COORDS(3, 7) 1
+QUBIT_COORDS(4, 6) 2
+QUBIT_COORDS(4, 12) 3
+QUBIT_COORDS(5, 1) 4
+QUBIT_COORDS(5, 7) 5
+QUBIT_COORDS(2, 2) 6
+QUBIT_COORDS(0, 8) 7
+QUBIT_COORDS(1, 3) 8
+QUBIT_COORDS(1, 9) 9
+QUBIT_COORDS(2, 8) 10
+QUBIT_COORDS(6, 2) 11
+QUBIT_COORDS(7, 7) 12
+QUBIT_COORDS(6, 8) 13
+QUBIT_COORDS(4, 2) 14
+QUBIT_COORDS(3, 3) 15
+QUBIT_COORDS(3, 9) 16
+QUBIT_COORDS(4, 8) 17
+QUBIT_COORDS(5, 3) 18
+QUBIT_COORDS(5, 9) 19
+QUBIT_COORDS(2, 4) 20
+QUBIT_COORDS(0, 4) 21
+QUBIT_COORDS(0, 10) 22
+QUBIT_COORDS(1, 5) 23
+QUBIT_COORDS(1, 11) 24
+QUBIT_COORDS(2, 10) 25
+QUBIT_COORDS(6, 4) 26
+QUBIT_COORDS(6, 10) 27
+QUBIT_COORDS(3, 5) 28
+QUBIT_COORDS(3, 11) 29
+QUBIT_COORDS(4, 4) 30
+QUBIT_COORDS(4, 10) 31
+QUBIT_COORDS(5, 5) 32
+QUBIT_COORDS(5, 11) 33
+QUBIT_COORDS(1, 1) 34
+QUBIT_COORDS(2, 0) 35
+QUBIT_COORDS(1, 7) 36
+QUBIT_COORDS(2, 6) 37
+QUBIT_COORDS(6, 6) 38
+R 29 19 5 36 33 9 16 24 1 22 37 31 13 10 17 25 3
+TICK
+H 33 9 16 24 22 37 31 13 10 17 25 3
+TICK
+CZ 22 24 37 1 31 33 10 16 17 19 25 29
+TICK
+H 24 1 33 16 19 29
+TICK
+CZ 22 9 37 36 31 19 10 1 17 16 25 24
+TICK
+H 36 1 24
+CZ 31 29 13 19 10 9 17 5 25 16 3 33
+TICK
+H 29 19 9 5 16 33
+TICK
+CZ 31 16 13 5 10 36 17 1 25 9 3 29
+TICK
+H 36 9 22 37 31 13 10 17 25 3
+TICK
+R 15 28 34 18 32 23 0 8
+M[{"qeci.message_type": "readout_send", "qeci.laddr": 0, "qeci.paddr": 0, "qeci.cast": 0}] 22 37 31 13 10 17 25 3
+TICK
+H 28 34 18 0
+R 21 22 35 6 20 37 10 25 14 30 2 17 31 3 26 13
+TICK
+DETECTOR[X](2, 6, 0) rec[-7]
+DETECTOR[X](4, 8, 0) rec[-3]
+DETECTOR[X](2, 10, 0) rec[-2]
+DETECTOR[X](4, 12, 0) rec[-1]
+SHIFT_COORDS(0, 0, 1)
+H 21 22 35 6 20 37 10 25 14 30 2 17 31 3 26 13
+TICK
+CZ 21 23 22 24 35 0 6 15 20 28 37 1 10 16 25 29 14 18 30 32 2 5 17 19 31 33
+TICK
+H 23 24 0 15 28 1 16 29 18 32 5 19 33
+TICK
+CZ 21 8 22 9 35 34 6 0 20 23 37 36 10 1 25 24 14 15 30 28 2 32 17 16 31 19
+TICK
+H 34 0 23 36 24
+CZ 6 8 20 15 37 28 10 9 25 16 30 18 2 1 17 5 31 29 3 33 26 32 13 19
+TICK
+H 8 15 28 9 16 18 1 5 29 33
+TICK
+CZ 6 34 20 8 37 23 10 36 25 9 14 0 30 15 2 28 17 1 31 16 3 29 26 18 13 5
+TICK
+H 34 23 9 15 1 29 21 22 35 6 20 37 10 25 14 30 2 17 31 3 26 13
+TICK
+M[{"qeci.message_type": "readout_send", "qeci.laddr": 0, "qeci.paddr": 1, "qeci.cast": 0}] 21 22 35 6 20 37 10 25 14 30 2 17 31 3 26 13
+TICK
+H 21 22 35 6 20 37 10 25 14 30 2 17 31 3 26 13
+TICK
+DETECTOR[{"basis": "X", "weight": 2, "neighbors": [24, 9\C}](0, 10, 0) rec[-24] rec[-15]
+DETECTOR[{"basis": "X", "weight": 4, "neighbors": [33, 19, 29, 16\C}](4, 10, 0) rec[-22] rec[-4]
+DETECTOR[{"basis": "X", "weight": 2, "neighbors": [19, 5\C}](6, 8, 0) rec[-21] rec[-1]
+DETECTOR[{"basis": "X", "weight": 4, "neighbors": [16, 1, 9, 36\C}](2, 8, 0) rec[-20] rec[-10]
+DETECTOR[{"basis": "X", "weight": 4, "neighbors": [19, 16, 5, 1\C}](4, 8, 0) rec[-5] rec[-19]
+DETECTOR[{"basis": "X", "weight": 4, "neighbors": [29, 24, 16, 9\C}](2, 10, 0) rec[-18] rec[-9]
+DETECTOR[{"basis": "X", "weight": 2, "neighbors": [33, 29\C}](4, 12, 0) rec[-3] rec[-17]
+DETECTOR[{"basis": "X", "weight": 2, "neighbors": [23, 8\C}](0, 4, 0) rec[-16]
+DETECTOR[{"basis": "X", "weight": 4, "neighbors": [15, 0, 8, 34\C}](2, 2, 0) rec[-13]
+DETECTOR[{"basis": "X", "weight": 4, "neighbors": [1, 36, 28, 23\C}](2, 6, 0) rec[-23] rec[-11]
+DETECTOR[{"basis": "X", "weight": 4, "neighbors": [32, 28, 18, 15\C}](4, 4, 0) rec[-7]
+SHIFT_COORDS(0, 0, 1)
+REPEAT 2 {
+    R 21 22 35 6 20 37 10 25 14 30 2 17 31 3 26 13
+    TICK
+    H 21 22 35 6 20 37 10 25 14 30 2 17 31 3 26 13 23 15 1 29 32 19
+    TICK
+    CZ 21 23 22 24 35 0 6 15 20 28 37 1 10 16 25 29 14 18 30 32 2 5 17 19 31 33
+    TICK
+    H 23 24 0 15 28 1 16 29 18 32 5 19 33 8 36
+    TICK
+    CZ 21 8 22 9 35 34 6 0 20 23 37 36 10 1 25 24 14 15 30 28 2 32 17 16 31 19
+    TICK
+    H 34 0 23 36 24
+    CZ 6 8 20 15 37 28 10 9 25 16 30 18 2 1 17 5 31 29 3 33 26 32 13 19
+    TICK
+    H 8 15 28 9 16 18 1 5 29 33
+    TICK
+    CZ 6 34 20 8 37 23 10 36 25 9 14 0 30 15 2 28 17 1 31 16 3 29 26 18 13 5
+    TICK
+    H 34 23 9 15 1 29 21 22 35 6 20 37 10 25 14 30 2 17 31 3 26 13
+    TICK
+    M[{"qeci.message_type": "readout_send", "qeci.laddr": 0, "qeci.paddr": 1, "qeci.cast": 0}] 21 22 35 6 20 37 10 25 14 30 2 17 31 3 26 13
+    TICK
+    H 21 22 35 6 20 37 10 25 14 30 2 17 31 3 26 13
+    DETECTOR[{"weight": 2, "neighbors": [23, 8\C, "basis": "X"}](0, 4, 0) rec[-16] rec[-32]
+    DETECTOR[{"weight": 2, "neighbors": [24, 9\C, "basis": "X"}](0, 10, 0) rec[-15] rec[-31]
+    DETECTOR[{"weight": 2, "neighbors": [0, 34\C, "basis": "X"}](2, 0, 0) rec[-14] rec[-30]
+    DETECTOR[{"weight": 4, "neighbors": [15, 0, 8, 34\C, "basis": "X"}](2, 2, 0) rec[-13] rec[-29]
+    DETECTOR[{"weight": 4, "neighbors": [28, 23, 15, 8\C, "basis": "X"}](2, 4, 0) rec[-12] rec[-28]
+    DETECTOR[{"weight": 4, "neighbors": [1, 36, 28, 23\C, "basis": "X"}](2, 6, 0) rec[-11] rec[-27]
+    DETECTOR[{"weight": 4, "neighbors": [16, 1, 9, 36\C, "basis": "X"}](2, 8, 0) rec[-10] rec[-26]
+    DETECTOR[{"weight": 4, "neighbors": [29, 24, 16, 9\C, "basis": "X"}](2, 10, 0) rec[-9] rec[-25]
+    DETECTOR[{"weight": 3, "neighbors": [18, 15, 0\C, "basis": "X"}](4, 2, 0) rec[-8] rec[-24]
+    DETECTOR[{"weight": 4, "neighbors": [32, 28, 18, 15\C, "basis": "X"}](4, 4, 0) rec[-7] rec[-23]
+    DETECTOR[{"weight": 4, "neighbors": [5, 32, 1, 28\C, "basis": "X"}](4, 6, 0) rec[-6] rec[-22]
+    DETECTOR[{"weight": 4, "neighbors": [19, 16, 5, 1\C, "basis": "X"}](4, 8, 0) rec[-5] rec[-21]
+    DETECTOR[{"weight": 4, "neighbors": [33, 19, 29, 16\C, "basis": "X"}](4, 10, 0) rec[-4] rec[-20]
+    DETECTOR[{"weight": 2, "neighbors": [33, 29\C, "basis": "X"}](4, 12, 0) rec[-3] rec[-19]
+    DETECTOR[{"weight": 2, "neighbors": [32, 18\C, "basis": "X"}](6, 4, 0) rec[-2] rec[-18]
+    DETECTOR[{"weight": 2, "neighbors": [19, 5\C, "basis": "X"}](6, 8, 0) rec[-1] rec[-17]
+    SHIFT_COORDS(0, 0, 1)
+}
+R 4 21 22 35 6 20 37 10 25 14 30 2 17 31 3 11 38 27
+TICK
+H 4 21 22 35 6 20 37 10 25 14 30 2 17 31 3 11 38 27 8 36 24 28 16 18 5 33
+TICK
+CZ 35 34 6 8 20 23 37 36 10 9 25 24 14 15 30 28 2 1 17 16 31 29 11 18 38 5 27 33
+TICK
+H 34 8 23 36 9 24 15 28 1 16 29 18 5 33 32 19
+TICK
+CZ 35 0 6 34 20 28 37 23 10 16 25 29 14 18 30 15 2 5 17 1 31 33 11 4 38 32 27 19
+TICK
+H 34 18 5 33 4
+CZ 21 23 22 24 6 15 20 8 37 1 10 36 25 9 14 0 30 32 2 28 17 19 31 16 3 29
+TICK
+H 23 15 8 1 9 0 32 28 19 16 29
+TICK
+CZ 21 8 22 9 6 0 20 15 37 28 10 1 25 16 14 4 30 18 2 32 17 5 31 19 3 33
+TICK
+H 8 0 28 16 18 5 33 21 22 35 6 20 37 10 25 14 30 2 17 31 3 11 38 27
+TICK
+M[{"qeci.message_type": "readout_send", "qeci.laddr": 0, "qeci.paddr": 2, "qeci.cast": 0}] 21 22 35 6 20 37 10 25 14 30 2 17 31 3 11 38 27
+TICK
+H 21 22 35 6 20 37 10 25 14 30 2 17 31 3 11 38 27
+TICK
+OBSERVABLE_INCLUDE(0) rec[-3] rec[-2] rec[-1]
+DETECTOR[{"basis": "X", "neighbors": [23, 8\C, "weight": 2}](0, 4, 0) rec[-17] rec[-33]
+DETECTOR[{"basis": "X", "neighbors": [24, 9\C, "weight": 2}](0, 10, 0) rec[-16] rec[-32]
+DETECTOR[{"basis": "X", "neighbors": [34, 0\C, "weight": 2}](2, 0, 0) rec[-15] rec[-31]
+DETECTOR[{"basis": "X", "neighbors": [8, 34, 15, 0\C, "weight": 4}](2, 2, 0) rec[-14] rec[-30]
+DETECTOR[{"basis": "X", "neighbors": [23, 28, 8, 15\C, "weight": 4}](2, 4, 0) rec[-13] rec[-29]
+DETECTOR[{"basis": "X", "neighbors": [36, 23, 1, 28\C, "weight": 4}](2, 6, 0) rec[-12] rec[-28]
+DETECTOR[{"basis": "X", "neighbors": [9, 16, 36, 1\C, "weight": 4}](2, 8, 0) rec[-11] rec[-27]
+DETECTOR[{"basis": "X", "neighbors": [24, 29, 9, 16\C, "weight": 4}](2, 10, 0) rec[-10] rec[-26]
+DETECTOR[{"basis": "X", "neighbors": [28, 15, 32, 18\C, "weight": 4}](4, 4, 0) rec[-8] rec[-24]
+DETECTOR[{"basis": "X", "neighbors": [1, 5, 28, 32\C, "weight": 4}](4, 6, 0) rec[-7] rec[-23]
+DETECTOR[{"basis": "X", "neighbors": [16, 1, 19, 5\C, "weight": 4}](4, 8, 0) rec[-6] rec[-22]
+DETECTOR[{"basis": "X", "neighbors": [29, 33, 16, 19\C, "weight": 4}](4, 10, 0) rec[-5] rec[-21]
+DETECTOR[{"basis": "X", "neighbors": [29, 33\C, "weight": 2}](4, 12, 0) rec[-4] rec[-20]
+DETECTOR[{"basis": "X", "neighbors": [15, 18, 0, 4\C, "weight": 4}](4, 2, 0) rec[-9] rec[-25]
+SHIFT_COORDS(0, 0, 1)
+REPEAT 2 {
+    R 21 22 35 6 20 37 10 25 14 30 2 17 31 3 11 38 27
+    TICK
+    H 21 22 35 6 20 37 10 25 14 30 2 17 31 3 11 38 27 8 36 24 28 16 18 5 33
+    TICK
+    CZ 35 34 6 8 20 23 37 36 10 9 25 24 14 15 30 28 2 1 17 16 31 29 11 18 38 5 27 33
+    TICK
+    H 34 8 23 36 9 24 15 28 1 16 29 18 5 33 4 32 19
+    TICK
+    CZ 35 0 6 34 20 28 37 23 10 16 25 29 14 18 30 15 2 5 17 1 31 33 11 4 38 32 27 19
+    TICK
+    H 34 18 5 33 4
+    CZ 21 23 22 24 6 15 20 8 37 1 10 36 25 9 14 0 30 32 2 28 17 19 31 16 3 29
+    TICK
+    H 23 15 8 1 9 0 32 28 19 16 29
+    TICK
+    CZ 21 8 22 9 6 0 20 15 37 28 10 1 25 16 14 4 30 18 2 32 17 5 31 19 3 33
+    TICK
+    H 8 0 28 16 18 5 33 21 22 35 6 20 37 10 25 14 30 2 17 31 3 11 38 27
+    TICK
+    M[{"qeci.message_type": "readout_send", "qeci.laddr": 0, "qeci.paddr": 2, "qeci.cast": 0}] 21 22 35 6 20 37 10 25 14 30 2 17 31 3 11 38 27
+    TICK
+    H 21 22 35 6 20 37 10 25 14 30 2 17 31 3 11 38 27
+    DETECTOR[{"weight": 2, "basis": "X", "neighbors": [23, 8\C}](0, 4, 0) rec[-34] rec[-17]
+    DETECTOR[{"weight": 2, "basis": "X", "neighbors": [24, 9\C}](0, 10, 0) rec[-16] rec[-33]
+    DETECTOR[{"weight": 2, "basis": "X", "neighbors": [34, 0\C}](2, 0, 0) rec[-32] rec[-15]
+    DETECTOR[{"weight": 4, "basis": "X", "neighbors": [8, 34, 15, 0\C}](2, 2, 0) rec[-31] rec[-14]
+    DETECTOR[{"weight": 4, "basis": "X", "neighbors": [23, 28, 8, 15\C}](2, 4, 0) rec[-30] rec[-13]
+    DETECTOR[{"weight": 4, "basis": "X", "neighbors": [36, 23, 1, 28\C}](2, 6, 0) rec[-29] rec[-12]
+    DETECTOR[{"weight": 4, "basis": "X", "neighbors": [9, 16, 36, 1\C}](2, 8, 0) rec[-28] rec[-11]
+    DETECTOR[{"weight": 4, "basis": "X", "neighbors": [24, 29, 9, 16\C}](2, 10, 0) rec[-27] rec[-10]
+    DETECTOR[{"weight": 4, "basis": "X", "neighbors": [15, 18, 0, 4\C}](4, 2, 0) rec[-26] rec[-9]
+    DETECTOR[{"weight": 4, "basis": "X", "neighbors": [28, 15, 32, 18\C}](4, 4, 0) rec[-8] rec[-25]
+    DETECTOR[{"weight": 4, "basis": "X", "neighbors": [1, 5, 28, 32\C}](4, 6, 0) rec[-24] rec[-7]
+    DETECTOR[{"weight": 4, "basis": "X", "neighbors": [16, 1, 19, 5\C}](4, 8, 0) rec[-23] rec[-6]
+    DETECTOR[{"weight": 4, "basis": "X", "neighbors": [29, 33, 16, 19\C}](4, 10, 0) rec[-22] rec[-5]
+    DETECTOR[{"weight": 2, "basis": "X", "neighbors": [29, 33\C}](4, 12, 0) rec[-21] rec[-4]
+    DETECTOR[{"weight": 2, "basis": "X", "neighbors": [18, 4\C}](6, 2, 0) rec[-20] rec[-3]
+    DETECTOR[{"weight": 2, "basis": "X", "neighbors": [5, 32\C}](6, 6, 0) rec[-19] rec[-2]
+    DETECTOR[{"weight": 2, "basis": "X", "neighbors": [33, 19\C}](6, 10, 0) rec[-1] rec[-18]
+    SHIFT_COORDS(0, 0, 1)
+}
+R 21 35 30 11 6 20 2 14
+M[{"qeci.message_type": "readout_send", "qeci.laddr": 0, "qeci.paddr": 3, "qeci.cast": 0}] 24 1 5 9 29 33 36 16 19
+TICK
+H 21 35 30 11 6 20 2 14 23 32 15
+TICK
+CZ 21 23 35 0 30 32 6 15 20 28 14 18
+TICK
+H 23 0 32 15 28 18 8
+TICK
+CZ 21 8 35 34 30 18 6 0 20 23 14 15
+TICK
+H 34 0 23
+CZ 30 28 11 18 6 8 20 15 2 32 14 4
+TICK
+H 28 18 8 15 32 4
+TICK
+CZ 30 15 11 4 6 34 20 8 2 28 14 0
+TICK
+H 4 34 8 21 35 30 11 6 20 2 14
+TICK
+R 19 5 36 9 16 1
+M[{"qeci.message_type": "readout_send", "qeci.laddr": 0, "qeci.paddr": 4, "qeci.cast": 0}] 21 35 30 11 6 20 2 14
+TICK
+H 19 36 9 1
+R 21 7 35 30 11 37 17 6 38 31 20 2 14 10
+TICK
+DETECTOR[{"neighbors": [23, 8\C, "weight": 2, "basis": "X"}](0, 4, 0) rec[-8] rec[-34]
+DETECTOR[{"neighbors": [0, 34\C, "weight": 2, "basis": "X"}](2, 0, 0) rec[-32] rec[-7]
+DETECTOR[{"neighbors": [15, 0, 8, 34\C, "weight": 4, "basis": "X"}](2, 2, 0) rec[-31] rec[-4]
+DETECTOR[{"neighbors": [28, 23, 15, 8\C, "weight": 4, "basis": "X"}](2, 4, 0) rec[-30] rec[-3]
+DETECTOR[{"neighbors": [18, 15, 4, 0\C, "weight": 4, "basis": "X"}](4, 2, 0) rec[-1] rec[-26]
+DETECTOR[{"neighbors": [32, 18, 28, 15\C, "weight": 4, "basis": "X"}](4, 4, 0) rec[-6] rec[-25]
+DETECTOR[{"neighbors": [18, 4\C, "weight": 2, "basis": "X"}](6, 2, 0) rec[-5] rec[-20]
+DETECTOR[{"basis": "Z", "coeff": 1.0, "boundary": false, "note": null}](0, 10, 0) rec[-14] rec[-17] rec[-33]
+DETECTOR[{"basis": "Z", "coeff": 1.0, "boundary": false, "note": null}](2, 8, 0) rec[-16] rec[-14] rec[-28] rec[-11] rec[-10]
+DETECTOR[{"basis": "X", "coeff": 1.0, "boundary": false, "note": null}](4, 6, 0) rec[-16] rec[-15] rec[-2] rec[-24]
+DETECTOR[{"basis": "X", "coeff": 1.0, "boundary": false, "note": null}](4, 10, 0) rec[-13] rec[-12] rec[-10] rec[-9] rec[-22]
+SHIFT_COORDS(0, 0, 1)
+H 21 7 35 30 11 37 17 6 38 31 20 2 14 10
+TICK
+CZ 21 23 7 9 35 0 30 32 37 1 17 19 6 15 20 28 2 5 14 18 10 16
+TICK
+H 23 9 0 32 1 19 15 28 5 18 16
+TICK
+CZ 21 8 7 36 35 34 30 18 37 28 17 5 6 0 20 23 2 1 14 15 10 9
+TICK
+H 34 0 23
+CZ 30 28 11 18 37 36 17 16 6 8 38 5 31 19 20 15 2 32 14 4 10 1
+TICK
+H 28 18 36 16 8 5 15 32 4 1
+TICK
+CZ 30 15 11 4 37 23 17 1 6 34 38 32 31 16 20 8 2 28 14 0 10 36
+TICK
+H 15 4 23 1 34 32 21 7 35 30 11 37 17 6 38 31 20 2 14 10
+TICK
+M[{"qeci.message_type": "readout_send", "qeci.laddr": 0, "qeci.paddr": 5, "qeci.cast": 0}] 21 7 35 30 11 37 17 6 38 31 20 2 14 10
+TICK
+H 21 7 35 30 11 37 17 6 38 31 20 2 14 10
+TICK
+DETECTOR[{"neighbors": [23, 8\C, "basis": "X", "weight": 2}](0, 4, 0) rec[-14] rec[-22]
+DETECTOR[{"neighbors": [0, 34\C, "basis": "X", "weight": 2}](2, 0, 0) rec[-21] rec[-12]
+DETECTOR[{"neighbors": [32, 18, 28, 15\C, "basis": "X", "weight": 4}](4, 4, 0) rec[-20] rec[-11]
+DETECTOR[{"neighbors": [18, 4\C, "basis": "X", "weight": 2}](6, 2, 0) rec[-19] rec[-10]
+DETECTOR[{"neighbors": [15, 0, 8, 34\C, "basis": "X", "weight": 4}](2, 2, 0) rec[-7] rec[-18]
+DETECTOR[{"neighbors": [28, 23, 15, 8\C, "basis": "X", "weight": 4}](2, 4, 0) rec[-4] rec[-17]
+DETECTOR[{"neighbors": [18, 15, 4, 0\C, "basis": "X", "weight": 4}](4, 2, 0) rec[-15] rec[-2]
+DETECTOR[{"neighbors": [19, 16\C, "basis": "X", "weight": 2}](4, 10, 0) rec[-5]
+DETECTOR[{"neighbors": [5, 1, 32, 28\C, "basis": "X", "weight": 4}](4, 6, 0) rec[-16] rec[-3]
+DETECTOR[{"neighbors": [16, 9, 1, 36\C, "basis": "X", "weight": 4}](2, 8, 0) rec[-1]
+SHIFT_COORDS(0, 0, 1)
+REPEAT 2 {
+    R 21 7 35 30 11 37 17 6 38 31 20 2 14 10
+    TICK
+    H 21 7 35 30 11 37 17 6 38 31 20 2 14 10 23 9 32 1 19 15
+    TICK
+    CZ 21 23 7 9 35 0 30 32 37 1 17 19 6 15 20 28 2 5 14 18 10 16
+    TICK
+    H 23 9 0 32 1 19 15 28 5 18 16 8 36
+    TICK
+    CZ 21 8 7 36 35 34 30 18 37 28 17 5 6 0 20 23 2 1 14 15 10 9
+    TICK
+    H 34 0 23
+    CZ 30 28 11 18 37 36 17 16 6 8 38 5 31 19 20 15 2 32 14 4 10 1
+    TICK
+    H 28 18 36 16 8 5 15 32 4 1
+    TICK
+    CZ 30 15 11 4 37 23 17 1 6 34 38 32 31 16 20 8 2 28 14 0 10 36
+    TICK
+    H 15 4 23 1 34 32 21 7 35 30 11 37 17 6 38 31 20 2 14 10
+    TICK
+    M[{"qeci.message_type": "readout_send", "qeci.laddr": 0, "qeci.paddr": 5, "qeci.cast": 0}] 21 7 35 30 11 37 17 6 38 31 20 2 14 10
+    TICK
+    H 21 7 35 30 11 37 17 6 38 31 20 2 14 10
+    DETECTOR[{"neighbors": [23, 8\C, "basis": "X", "weight": 2}](0, 4, 0) rec[-14] rec[-28]
+    DETECTOR[{"neighbors": [9, 36\C, "basis": "X", "weight": 2}](0, 8, 0) rec[-13] rec[-27]
+    DETECTOR[{"neighbors": [0, 34\C, "basis": "X", "weight": 2}](2, 0, 0) rec[-12] rec[-26]
+    DETECTOR[{"neighbors": [32, 18, 28, 15\C, "basis": "X", "weight": 4}](4, 4, 0) rec[-11] rec[-25]
+    DETECTOR[{"neighbors": [18, 4\C, "basis": "X", "weight": 2}](6, 2, 0) rec[-24] rec[-10]
+    DETECTOR[{"neighbors": [1, 28, 36, 23\C, "basis": "X", "weight": 4}](2, 6, 0) rec[-23] rec[-9]
+    DETECTOR[{"neighbors": [19, 5, 16, 1\C, "basis": "X", "weight": 4}](4, 8, 0) rec[-8] rec[-22]
+    DETECTOR[{"neighbors": [15, 0, 8, 34\C, "basis": "X", "weight": 4}](2, 2, 0) rec[-7] rec[-21]
+    DETECTOR[{"neighbors": [5, 32\C, "basis": "X", "weight": 2}](6, 6, 0) rec[-6] rec[-20]
+    DETECTOR[{"neighbors": [19, 16\C, "basis": "X", "weight": 2}](4, 10, 0) rec[-5] rec[-19]
+    DETECTOR[{"neighbors": [28, 23, 15, 8\C, "basis": "X", "weight": 4}](2, 4, 0) rec[-4] rec[-18]
+    DETECTOR[{"neighbors": [5, 1, 32, 28\C, "basis": "X", "weight": 4}](4, 6, 0) rec[-3] rec[-17]
+    DETECTOR[{"neighbors": [18, 15, 4, 0\C, "basis": "X", "weight": 4}](4, 2, 0) rec[-16] rec[-2]
+    DETECTOR[{"neighbors": [16, 9, 1, 36\C, "basis": "X", "weight": 4}](2, 8, 0) rec[-15] rec[-1]
+    SHIFT_COORDS(0, 0, 1)
+}
+R 7 20 38 37 17 31 2 10
+M[{"qeci.message_type": "readout_send", "qeci.laddr": 0, "qeci.paddr": 6, "qeci.cast": 0}] 0 34 4 15 18 8
+TICK
+H 7 20 38 37 17 31 2 10 9 1 19
+TICK
+OBSERVABLE_INCLUDE(0) rec[-16] rec[-13] rec[-20] rec[-17]
+CZ 7 9 20 28 37 1 17 19 2 5 10 16
+TICK
+H 9 28 1 19 5 16 36
+TICK
+CZ 7 36 20 23 37 28 17 5 2 1 10 9
+TICK
+H 23 28 9
+CZ 38 5 37 36 17 16 31 19 2 32 10 1
+TICK
+H 5 36 16 19 32 1
+TICK
+CZ 38 32 37 23 17 1 31 16 2 28 10 36
+TICK
+H 36 7 20 38 37 17 31 2 10
+TICK
+M[{"qeci.message_type": "readout_send", "qeci.laddr": 0, "qeci.paddr": 7, "qeci.cast": 0}] 7 20 38 37 17 31 2 10
+TICK
+H 7 20
+R 37 10 38 25 2 12 17 27 33 13 31
+TICK
+DETECTOR[{"basis": "X", "weight": 2, "neighbors": [9, 36\C}](0, 8, 0) rec[-8] rec[-27]
+DETECTOR[{"basis": "X", "weight": 4, "neighbors": [1, 28, 36, 23\C}](2, 6, 0) rec[-23] rec[-5]
+DETECTOR[{"basis": "X", "weight": 4, "neighbors": [19, 5, 16, 1\C}](4, 8, 0) rec[-22] rec[-4]
+DETECTOR[{"basis": "X", "weight": 2, "neighbors": [5, 32\C}](6, 6, 0) rec[-6] rec[-20]
+DETECTOR[{"basis": "X", "weight": 2, "neighbors": [19, 16\C}](4, 10, 0) rec[-3] rec[-19]
+DETECTOR[{"basis": "X", "weight": 4, "neighbors": [5, 1, 32, 28\C}](4, 6, 0) rec[-2] rec[-17]
+DETECTOR[{"basis": "X", "weight": 4, "neighbors": [16, 9, 1, 36\C}](2, 8, 0) rec[-15] rec[-1]
+DETECTOR[{"coeff": 1.0, "basis": "X", "boundary": false, "note": null}](2, 0, 0) rec[-14] rec[-13] rec[-26]
+DETECTOR[{"coeff": 1.0, "basis": "X", "boundary": false, "note": null}](2, 4, 0) rec[-7] rec[-11] rec[-18] rec[-9]
+DETECTOR[{"coeff": 1.0, "basis": "X", "boundary": false, "note": null}](4, 2, 0) rec[-16] rec[-14] rec[-12] rec[-11] rec[-10]
+SHIFT_COORDS(0, 0, 1)
+H 37 10 38 25 2 12 17 27 33 13 31
+TICK
+CZ 37 23 10 36 38 32 25 9 28 2 17 1 27 19 5 13 16 31
+TICK
+H 10 9 28 1 19 5 16
+TICK
+CZ 9 10 28 37 1 2 19 13 5 17 16 25
+TICK
+H 37 2
+CZ 12 13 1 10 19 31 33 27 5 38 16 17
+TICK
+H 10 31 27 38 17
+TICK
+CZ 12 38 1 37 19 17 33 31 5 2 16 10
+TICK
+H 37 17 31 2 10 23 36 32 9 28 12 1 19 33 5 16
+TICK
+M[{"qeci.message_type": "readout_send", "qeci.laddr": 0, "qeci.paddr": 8, "qeci.cast": 0}] 23 36 32 9 28 12 1 19 33 5 16
+TICK
+H 28 12
+R 1 5 33 22 3 29 19 9 16 24 36
+TICK
+DETECTOR[{"basis": "X", "boundary": true, "coeff": 1.0, "note": null}](0, 8, 0) rec[-8] rec[-19]
+DETECTOR[{"basis": "X", "boundary": false, "coeff": 1.0, "note": null}](2, 4, 0) rec[-7] rec[-11] rec[-18]
+DETECTOR[{"basis": "X", "boundary": true, "coeff": 1.0, "note": null}](6, 6, 0) rec[-6] rec[-17]
+DETECTOR[{"basis": "X", "boundary": true, "coeff": 1.0, "note": null}](2, 6, 0) rec[-16] rec[-5]
+DETECTOR[{"basis": "X", "boundary": true, "coeff": 1.0, "note": null}](4, 8, 0) rec[-15] rec[-4]
+DETECTOR[{"basis": "X", "boundary": true, "coeff": 1.0, "note": null}](4, 10, 0) rec[-14] rec[-3]
+DETECTOR[{"basis": "X", "boundary": false, "coeff": 1.0, "note": null}](4, 6, 0) rec[-13] rec[-2] rec[-9]
+DETECTOR[{"basis": "X", "boundary": false, "coeff": 1.0, "note": null}](2, 8, 0) rec[-12] rec[-1] rec[-10]
+SHIFT_COORDS(0, 0, 1)
+H 1 5 33 22 3 29 19 9 16 24 36
+TICK
+CZ 1 2 5 38 33 27 29 31 19 13 9 10 17 16 25 24 37 36
+TICK
+H 5 33 31 13 10 17 25 37
+TICK
+CZ 31 16 13 5 10 36 17 19 25 29 37 1
+TICK
+H 5 19
+CZ 22 24 3 29 31 33 10 16 17 1 25 9
+TICK
+H 33 16 1 9
+TICK
+CZ 22 9 3 33 31 19 10 1 17 5 25 16
+TICK
+H 2 38 27 22 3 31 13 10 17 25 37 33 5 16 29
+TICK
+M[{"qeci.message_type": "readout_send", "qeci.laddr": 0, "qeci.paddr": 9, "qeci.cast": 0}] 2 38 27 22 3 31 13 10 17 25 37 33 24 1 5 36 16 19 9 29
+TICK
+H 22 3 31 13 10 17 25 37 33 24 1 5 36 16 19 9 29
+DETECTOR[{"boundary": true, "basis": "X", "coeff": 1.0, "note": null}](1, 9, 0) rec[-28] rec[-17]
+DETECTOR[{"boundary": false, "basis": "X", "coeff": 1.0, "note": null}](3, 5, 0) rec[-20] rec[-27] rec[-10]
+DETECTOR[{"boundary": true, "basis": "X", "coeff": 1.0, "note": null}](7, 7, 0) rec[-14] rec[-26]
+DETECTOR[{"boundary": true, "basis": "X", "coeff": 1.0, "note": null}](3, 7, 0) rec[-13] rec[-25]
+DETECTOR[{"boundary": true, "basis": "X", "coeff": 1.0, "note": null}](5, 9, 0) rec[-24] rec[-15]
+DETECTOR[{"boundary": false, "basis": "X", "coeff": 1.0, "note": null}](5, 11, 0) rec[-16] rec[-23] rec[-18]
+DETECTOR[{"boundary": false, "basis": "X", "coeff": 1.0, "note": null}](5, 7, 0) rec[-19] rec[-22] rec[-12] rec[-20]
+DETECTOR[{"boundary": true, "basis": "X", "coeff": 1.0, "note": null}](3, 9, 0) rec[-21] rec[-11]
+SHIFT_COORDS(0, 0, 1)
+OBSERVABLE_INCLUDE(0) rec[-7] rec[-6] rec[-5]
+DETECTOR[{"basis": "Z", "coeff": 1.0, "boundary": false, "note": null}](1, 9, 0) rec[-8] rec[-2] rec[-17]
+DETECTOR[{"basis": "X", "coeff": 1.0, "boundary": false, "note": null}](5, 9, 0) rec[-15] rec[-9] rec[-4] rec[-3] rec[-1]
+DETECTOR[{"basis": "X", "coeff": 1.0, "boundary": false, "note": null}](7, 7, 0) rec[-6] rec[-14] rec[-3]
+DETECTOR[{"basis": "Z", "coeff": 1.0, "boundary": false, "note": null, "label": "#Z"}](3, 7, 0) rec[-13] rec[-7] rec[-5] rec[-4] rec[-2]
+SHIFT_COORDS(0, 0, 1)
+
+# CHECK:       QUBIT_COORDS(3, 1) 0
+# CHECK-NEXT:  QUBIT_COORDS(3, 7) 1
+# CHECK-NEXT:  QUBIT_COORDS(4, 6) 2
+# CHECK-NEXT:  QUBIT_COORDS(4, 12) 3
+# CHECK-NEXT:  QUBIT_COORDS(5, 1) 4
+# CHECK-NEXT:  QUBIT_COORDS(5, 7) 5
+# CHECK-NEXT:  QUBIT_COORDS(2, 2) 6
+# CHECK-NEXT:  QUBIT_COORDS(0, 8) 7
+# CHECK-NEXT:  QUBIT_COORDS(1, 3) 8
+# CHECK-NEXT:  QUBIT_COORDS(1, 9) 9
+# CHECK-NEXT:  QUBIT_COORDS(2, 8) 10
+# CHECK-NEXT:  QUBIT_COORDS(6, 2) 11
+# CHECK-NEXT:  QUBIT_COORDS(7, 7) 12
+# CHECK-NEXT:  QUBIT_COORDS(6, 8) 13
+# CHECK-NEXT:  QUBIT_COORDS(4, 2) 14
+# CHECK-NEXT:  QUBIT_COORDS(3, 3) 15
+# CHECK-NEXT:  QUBIT_COORDS(3, 9) 16
+# CHECK-NEXT:  QUBIT_COORDS(4, 8) 17
+# CHECK-NEXT:  QUBIT_COORDS(5, 3) 18
+# CHECK-NEXT:  QUBIT_COORDS(5, 9) 19
+# CHECK-NEXT:  QUBIT_COORDS(2, 4) 20
+# CHECK-NEXT:  QUBIT_COORDS(0, 4) 21
+# CHECK-NEXT:  QUBIT_COORDS(0, 10) 22
+# CHECK-NEXT:  QUBIT_COORDS(1, 5) 23
+# CHECK-NEXT:  QUBIT_COORDS(1, 11) 24
+# CHECK-NEXT:  QUBIT_COORDS(2, 10) 25
+# CHECK-NEXT:  QUBIT_COORDS(6, 4) 26
+# CHECK-NEXT:  QUBIT_COORDS(6, 10) 27
+# CHECK-NEXT:  QUBIT_COORDS(3, 5) 28
+# CHECK-NEXT:  QUBIT_COORDS(3, 11) 29
+# CHECK-NEXT:  QUBIT_COORDS(4, 4) 30
+# CHECK-NEXT:  QUBIT_COORDS(4, 10) 31
+# CHECK-NEXT:  QUBIT_COORDS(5, 5) 32
+# CHECK-NEXT:  QUBIT_COORDS(5, 11) 33
+# CHECK-NEXT:  QUBIT_COORDS(1, 1) 34
+# CHECK-NEXT:  QUBIT_COORDS(2, 0) 35
+# CHECK-NEXT:  QUBIT_COORDS(1, 7) 36
+# CHECK-NEXT:  QUBIT_COORDS(2, 6) 37
+# CHECK-NEXT:  QUBIT_COORDS(6, 6) 38
+# CHECK-NEXT:  R 29 19 5 36 33 9 16 24 1 22 37 31 13 10 17 25 3
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 33 9 16 24 22 37 31 13 10 17 25 3
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CZ 22 24 37 1 31 33 10 16 17 19 25 29
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 24 1 33 16 19 29
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CZ 22 9 37 36 31 19 10 1 17 16 25 24
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 36 1 24
+# CHECK-NEXT:  CZ 31 29 13 19 10 9 17 5 25 16 3 33
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 29 19 9 5 16 33
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CZ 31 16 13 5 10 36 17 1 25 9 3 29
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 36 9 22 37 31 13 10 17 25 3
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  R 15 28 34 18 32 23 0 8
+# CHECK-NEXT:  M[{"qeci.message_type": "readout_send", "qeci.laddr": 0, "qeci.paddr": 0, "qeci.cast": 0}] 22 37 31 13 10 17 25 3
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 28 34 18 0
+# CHECK-NEXT:  R 21 22 35 6 20 37 10 25 14 30 2 17 31 3 26 13
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  DETECTOR[X](2, 6, 0) rec[-7]
+# CHECK-NEXT:  DETECTOR[X](4, 8, 0) rec[-3]
+# CHECK-NEXT:  DETECTOR[X](2, 10, 0) rec[-2]
+# CHECK-NEXT:  DETECTOR[X](4, 12, 0) rec[-1]
+# CHECK-NEXT:  SHIFT_COORDS(0, 0, 1)
+# CHECK-NEXT:  H 21 22 35 6 20 37 10 25 14 30 2 17 31 3 26 13
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CZ 21 23 22 24 35 0 6 15 20 28 37 1 10 16 25 29 14 18 30 32 2 5 17 19 31 33
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 23 24 0 15 28 1 16 29 18 32 5 19 33
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CZ 21 8 22 9 35 34 6 0 20 23 37 36 10 1 25 24 14 15 30 28 2 32 17 16 31 19
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 34 0 23 36 24
+# CHECK-NEXT:  CZ 6 8 20 15 37 28 10 9 25 16 30 18 2 1 17 5 31 29 3 33 26 32 13 19
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 8 15 28 9 16 18 1 5 29 33
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CZ 6 34 20 8 37 23 10 36 25 9 14 0 30 15 2 28 17 1 31 16 3 29 26 18 13 5
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 34 23 9 15 1 29 21 22 35 6 20 37 10 25 14 30 2 17 31 3 26 13
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  M[{"qeci.message_type": "readout_send", "qeci.laddr": 0, "qeci.paddr": 1, "qeci.cast": 0}] 21 22 35 6 20 37 10 25 14 30 2 17 31 3 26 13
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 21 22 35 6 20 37 10 25 14 30 2 17 31 3 26 13
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "weight": 2, "neighbors": [24, 9\C}](0, 10, 0) rec[-24] rec[-15]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "weight": 4, "neighbors": [33, 19, 29, 16\C}](4, 10, 0) rec[-22] rec[-4]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "weight": 2, "neighbors": [19, 5\C}](6, 8, 0) rec[-21] rec[-1]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "weight": 4, "neighbors": [16, 1, 9, 36\C}](2, 8, 0) rec[-20] rec[-10]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "weight": 4, "neighbors": [19, 16, 5, 1\C}](4, 8, 0) rec[-5] rec[-19]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "weight": 4, "neighbors": [29, 24, 16, 9\C}](2, 10, 0) rec[-18] rec[-9]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "weight": 2, "neighbors": [33, 29\C}](4, 12, 0) rec[-3] rec[-17]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "weight": 2, "neighbors": [23, 8\C}](0, 4, 0) rec[-16]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "weight": 4, "neighbors": [15, 0, 8, 34\C}](2, 2, 0) rec[-13]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "weight": 4, "neighbors": [1, 36, 28, 23\C}](2, 6, 0) rec[-23] rec[-11]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "weight": 4, "neighbors": [32, 28, 18, 15\C}](4, 4, 0) rec[-7]
+# CHECK-NEXT:  SHIFT_COORDS(0, 0, 1)
+# CHECK-NEXT:  REPEAT 2 {
+# CHECK-NEXT:      R 21 22 35 6 20 37 10 25 14 30 2 17 31 3 26 13
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      H 21 22 35 6 20 37 10 25 14 30 2 17 31 3 26 13 23 15 1 29 32 19
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      CZ 21 23 22 24 35 0 6 15 20 28 37 1 10 16 25 29 14 18 30 32 2 5 17 19 31 33
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      H 23 24 0 15 28 1 16 29 18 32 5 19 33 8 36
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      CZ 21 8 22 9 35 34 6 0 20 23 37 36 10 1 25 24 14 15 30 28 2 32 17 16 31 19
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      H 34 0 23 36 24
+# CHECK-NEXT:      CZ 6 8 20 15 37 28 10 9 25 16 30 18 2 1 17 5 31 29 3 33 26 32 13 19
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      H 8 15 28 9 16 18 1 5 29 33
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      CZ 6 34 20 8 37 23 10 36 25 9 14 0 30 15 2 28 17 1 31 16 3 29 26 18 13 5
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      H 34 23 9 15 1 29 21 22 35 6 20 37 10 25 14 30 2 17 31 3 26 13
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      M[{"qeci.message_type": "readout_send", "qeci.laddr": 0, "qeci.paddr": 1, "qeci.cast": 0}] 21 22 35 6 20 37 10 25 14 30 2 17 31 3 26 13
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      H 21 22 35 6 20 37 10 25 14 30 2 17 31 3 26 13
+# CHECK-NEXT:      DETECTOR[{"weight": 2, "neighbors": [23, 8\C, "basis": "X"}](0, 4, 0) rec[-16] rec[-32]
+# CHECK-NEXT:      DETECTOR[{"weight": 2, "neighbors": [24, 9\C, "basis": "X"}](0, 10, 0) rec[-15] rec[-31]
+# CHECK-NEXT:      DETECTOR[{"weight": 2, "neighbors": [0, 34\C, "basis": "X"}](2, 0, 0) rec[-14] rec[-30]
+# CHECK-NEXT:      DETECTOR[{"weight": 4, "neighbors": [15, 0, 8, 34\C, "basis": "X"}](2, 2, 0) rec[-13] rec[-29]
+# CHECK-NEXT:      DETECTOR[{"weight": 4, "neighbors": [28, 23, 15, 8\C, "basis": "X"}](2, 4, 0) rec[-12] rec[-28]
+# CHECK-NEXT:      DETECTOR[{"weight": 4, "neighbors": [1, 36, 28, 23\C, "basis": "X"}](2, 6, 0) rec[-11] rec[-27]
+# CHECK-NEXT:      DETECTOR[{"weight": 4, "neighbors": [16, 1, 9, 36\C, "basis": "X"}](2, 8, 0) rec[-10] rec[-26]
+# CHECK-NEXT:      DETECTOR[{"weight": 4, "neighbors": [29, 24, 16, 9\C, "basis": "X"}](2, 10, 0) rec[-9] rec[-25]
+# CHECK-NEXT:      DETECTOR[{"weight": 3, "neighbors": [18, 15, 0\C, "basis": "X"}](4, 2, 0) rec[-8] rec[-24]
+# CHECK-NEXT:      DETECTOR[{"weight": 4, "neighbors": [32, 28, 18, 15\C, "basis": "X"}](4, 4, 0) rec[-7] rec[-23]
+# CHECK-NEXT:      DETECTOR[{"weight": 4, "neighbors": [5, 32, 1, 28\C, "basis": "X"}](4, 6, 0) rec[-6] rec[-22]
+# CHECK-NEXT:      DETECTOR[{"weight": 4, "neighbors": [19, 16, 5, 1\C, "basis": "X"}](4, 8, 0) rec[-5] rec[-21]
+# CHECK-NEXT:      DETECTOR[{"weight": 4, "neighbors": [33, 19, 29, 16\C, "basis": "X"}](4, 10, 0) rec[-4] rec[-20]
+# CHECK-NEXT:      DETECTOR[{"weight": 2, "neighbors": [33, 29\C, "basis": "X"}](4, 12, 0) rec[-3] rec[-19]
+# CHECK-NEXT:      DETECTOR[{"weight": 2, "neighbors": [32, 18\C, "basis": "X"}](6, 4, 0) rec[-2] rec[-18]
+# CHECK-NEXT:      DETECTOR[{"weight": 2, "neighbors": [19, 5\C, "basis": "X"}](6, 8, 0) rec[-1] rec[-17]
+# CHECK-NEXT:      SHIFT_COORDS(0, 0, 1)
+# CHECK-NEXT:  }
+# CHECK-NEXT:  R 4 21 22 35 6 20 37 10 25 14 30 2 17 31 3 11 38 27
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 4 21 22 35 6 20 37 10 25 14 30 2 17 31 3 11 38 27 8 36 24 28 16 18 5 33
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CZ 35 34 6 8 20 23 37 36 10 9 25 24 14 15 30 28 2 1 17 16 31 29 11 18 38 5 27 33
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 34 8 23 36 9 24 15 28 1 16 29 18 5 33 32 19
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CZ 35 0 6 34 20 28 37 23 10 16 25 29 14 18 30 15 2 5 17 1 31 33 11 4 38 32 27 19
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 34 18 5 33 4
+# CHECK-NEXT:  CZ 21 23 22 24 6 15 20 8 37 1 10 36 25 9 14 0 30 32 2 28 17 19 31 16 3 29
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 23 15 8 1 9 0 32 28 19 16 29
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CZ 21 8 22 9 6 0 20 15 37 28 10 1 25 16 14 4 30 18 2 32 17 5 31 19 3 33
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 8 0 28 16 18 5 33 21 22 35 6 20 37 10 25 14 30 2 17 31 3 11 38 27
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  M[{"qeci.message_type": "readout_send", "qeci.laddr": 0, "qeci.paddr": 2, "qeci.cast": 0}] 21 22 35 6 20 37 10 25 14 30 2 17 31 3 11 38 27
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 21 22 35 6 20 37 10 25 14 30 2 17 31 3 11 38 27
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  OBSERVABLE_INCLUDE(0) rec[-3] rec[-2] rec[-1]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "neighbors": [23, 8\C, "weight": 2}](0, 4, 0) rec[-17] rec[-33]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "neighbors": [24, 9\C, "weight": 2}](0, 10, 0) rec[-16] rec[-32]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "neighbors": [34, 0\C, "weight": 2}](2, 0, 0) rec[-15] rec[-31]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "neighbors": [8, 34, 15, 0\C, "weight": 4}](2, 2, 0) rec[-14] rec[-30]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "neighbors": [23, 28, 8, 15\C, "weight": 4}](2, 4, 0) rec[-13] rec[-29]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "neighbors": [36, 23, 1, 28\C, "weight": 4}](2, 6, 0) rec[-12] rec[-28]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "neighbors": [9, 16, 36, 1\C, "weight": 4}](2, 8, 0) rec[-11] rec[-27]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "neighbors": [24, 29, 9, 16\C, "weight": 4}](2, 10, 0) rec[-10] rec[-26]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "neighbors": [28, 15, 32, 18\C, "weight": 4}](4, 4, 0) rec[-8] rec[-24]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "neighbors": [1, 5, 28, 32\C, "weight": 4}](4, 6, 0) rec[-7] rec[-23]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "neighbors": [16, 1, 19, 5\C, "weight": 4}](4, 8, 0) rec[-6] rec[-22]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "neighbors": [29, 33, 16, 19\C, "weight": 4}](4, 10, 0) rec[-5] rec[-21]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "neighbors": [29, 33\C, "weight": 2}](4, 12, 0) rec[-4] rec[-20]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "neighbors": [15, 18, 0, 4\C, "weight": 4}](4, 2, 0) rec[-9] rec[-25]
+# CHECK-NEXT:  SHIFT_COORDS(0, 0, 1)
+# CHECK-NEXT:  REPEAT 2 {
+# CHECK-NEXT:      R 21 22 35 6 20 37 10 25 14 30 2 17 31 3 11 38 27
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      H 21 22 35 6 20 37 10 25 14 30 2 17 31 3 11 38 27 8 36 24 28 16 18 5 33
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      CZ 35 34 6 8 20 23 37 36 10 9 25 24 14 15 30 28 2 1 17 16 31 29 11 18 38 5 27 33
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      H 34 8 23 36 9 24 15 28 1 16 29 18 5 33 4 32 19
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      CZ 35 0 6 34 20 28 37 23 10 16 25 29 14 18 30 15 2 5 17 1 31 33 11 4 38 32 27 19
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      H 34 18 5 33 4
+# CHECK-NEXT:      CZ 21 23 22 24 6 15 20 8 37 1 10 36 25 9 14 0 30 32 2 28 17 19 31 16 3 29
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      H 23 15 8 1 9 0 32 28 19 16 29
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      CZ 21 8 22 9 6 0 20 15 37 28 10 1 25 16 14 4 30 18 2 32 17 5 31 19 3 33
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      H 8 0 28 16 18 5 33 21 22 35 6 20 37 10 25 14 30 2 17 31 3 11 38 27
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      M[{"qeci.message_type": "readout_send", "qeci.laddr": 0, "qeci.paddr": 2, "qeci.cast": 0}] 21 22 35 6 20 37 10 25 14 30 2 17 31 3 11 38 27
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      H 21 22 35 6 20 37 10 25 14 30 2 17 31 3 11 38 27
+# CHECK-NEXT:      DETECTOR[{"weight": 2, "basis": "X", "neighbors": [23, 8\C}](0, 4, 0) rec[-34] rec[-17]
+# CHECK-NEXT:      DETECTOR[{"weight": 2, "basis": "X", "neighbors": [24, 9\C}](0, 10, 0) rec[-16] rec[-33]
+# CHECK-NEXT:      DETECTOR[{"weight": 2, "basis": "X", "neighbors": [34, 0\C}](2, 0, 0) rec[-32] rec[-15]
+# CHECK-NEXT:      DETECTOR[{"weight": 4, "basis": "X", "neighbors": [8, 34, 15, 0\C}](2, 2, 0) rec[-31] rec[-14]
+# CHECK-NEXT:      DETECTOR[{"weight": 4, "basis": "X", "neighbors": [23, 28, 8, 15\C}](2, 4, 0) rec[-30] rec[-13]
+# CHECK-NEXT:      DETECTOR[{"weight": 4, "basis": "X", "neighbors": [36, 23, 1, 28\C}](2, 6, 0) rec[-29] rec[-12]
+# CHECK-NEXT:      DETECTOR[{"weight": 4, "basis": "X", "neighbors": [9, 16, 36, 1\C}](2, 8, 0) rec[-28] rec[-11]
+# CHECK-NEXT:      DETECTOR[{"weight": 4, "basis": "X", "neighbors": [24, 29, 9, 16\C}](2, 10, 0) rec[-27] rec[-10]
+# CHECK-NEXT:      DETECTOR[{"weight": 4, "basis": "X", "neighbors": [15, 18, 0, 4\C}](4, 2, 0) rec[-26] rec[-9]
+# CHECK-NEXT:      DETECTOR[{"weight": 4, "basis": "X", "neighbors": [28, 15, 32, 18\C}](4, 4, 0) rec[-8] rec[-25]
+# CHECK-NEXT:      DETECTOR[{"weight": 4, "basis": "X", "neighbors": [1, 5, 28, 32\C}](4, 6, 0) rec[-24] rec[-7]
+# CHECK-NEXT:      DETECTOR[{"weight": 4, "basis": "X", "neighbors": [16, 1, 19, 5\C}](4, 8, 0) rec[-23] rec[-6]
+# CHECK-NEXT:      DETECTOR[{"weight": 4, "basis": "X", "neighbors": [29, 33, 16, 19\C}](4, 10, 0) rec[-22] rec[-5]
+# CHECK-NEXT:      DETECTOR[{"weight": 2, "basis": "X", "neighbors": [29, 33\C}](4, 12, 0) rec[-21] rec[-4]
+# CHECK-NEXT:      DETECTOR[{"weight": 2, "basis": "X", "neighbors": [18, 4\C}](6, 2, 0) rec[-20] rec[-3]
+# CHECK-NEXT:      DETECTOR[{"weight": 2, "basis": "X", "neighbors": [5, 32\C}](6, 6, 0) rec[-19] rec[-2]
+# CHECK-NEXT:      DETECTOR[{"weight": 2, "basis": "X", "neighbors": [33, 19\C}](6, 10, 0) rec[-1] rec[-18]
+# CHECK-NEXT:      SHIFT_COORDS(0, 0, 1)
+# CHECK-NEXT:  }
+# CHECK-NEXT:  R 21 35 30 11 6 20 2 14
+# CHECK-NEXT:  M[{"qeci.message_type": "readout_send", "qeci.laddr": 0, "qeci.paddr": 3, "qeci.cast": 0}] 24 1 5 9 29 33 36 16 19
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 21 35 30 11 6 20 2 14 23 32 15
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CZ 21 23 35 0 30 32 6 15 20 28 14 18
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 23 0 32 15 28 18 8
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CZ 21 8 35 34 30 18 6 0 20 23 14 15
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 34 0 23
+# CHECK-NEXT:  CZ 30 28 11 18 6 8 20 15 2 32 14 4
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 28 18 8 15 32 4
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CZ 30 15 11 4 6 34 20 8 2 28 14 0
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 4 34 8 21 35 30 11 6 20 2 14
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  R 19 5 36 9 16 1
+# CHECK-NEXT:  M[{"qeci.message_type": "readout_send", "qeci.laddr": 0, "qeci.paddr": 4, "qeci.cast": 0}] 21 35 30 11 6 20 2 14
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 19 36 9 1
+# CHECK-NEXT:  R 21 7 35 30 11 37 17 6 38 31 20 2 14 10
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  DETECTOR[{"neighbors": [23, 8\C, "weight": 2, "basis": "X"}](0, 4, 0) rec[-8] rec[-34]
+# CHECK-NEXT:  DETECTOR[{"neighbors": [0, 34\C, "weight": 2, "basis": "X"}](2, 0, 0) rec[-32] rec[-7]
+# CHECK-NEXT:  DETECTOR[{"neighbors": [15, 0, 8, 34\C, "weight": 4, "basis": "X"}](2, 2, 0) rec[-31] rec[-4]
+# CHECK-NEXT:  DETECTOR[{"neighbors": [28, 23, 15, 8\C, "weight": 4, "basis": "X"}](2, 4, 0) rec[-30] rec[-3]
+# CHECK-NEXT:  DETECTOR[{"neighbors": [18, 15, 4, 0\C, "weight": 4, "basis": "X"}](4, 2, 0) rec[-1] rec[-26]
+# CHECK-NEXT:  DETECTOR[{"neighbors": [32, 18, 28, 15\C, "weight": 4, "basis": "X"}](4, 4, 0) rec[-6] rec[-25]
+# CHECK-NEXT:  DETECTOR[{"neighbors": [18, 4\C, "weight": 2, "basis": "X"}](6, 2, 0) rec[-5] rec[-20]
+# CHECK-NEXT:  DETECTOR[{"basis": "Z", "coeff": 1.0, "boundary": false, "note": null}](0, 10, 0) rec[-14] rec[-17] rec[-33]
+# CHECK-NEXT:  DETECTOR[{"basis": "Z", "coeff": 1.0, "boundary": false, "note": null}](2, 8, 0) rec[-16] rec[-14] rec[-28] rec[-11] rec[-10]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "coeff": 1.0, "boundary": false, "note": null}](4, 6, 0) rec[-16] rec[-15] rec[-2] rec[-24]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "coeff": 1.0, "boundary": false, "note": null}](4, 10, 0) rec[-13] rec[-12] rec[-10] rec[-9] rec[-22]
+# CHECK-NEXT:  SHIFT_COORDS(0, 0, 1)
+# CHECK-NEXT:  H 21 7 35 30 11 37 17 6 38 31 20 2 14 10
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CZ 21 23 7 9 35 0 30 32 37 1 17 19 6 15 20 28 2 5 14 18 10 16
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 23 9 0 32 1 19 15 28 5 18 16
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CZ 21 8 7 36 35 34 30 18 37 28 17 5 6 0 20 23 2 1 14 15 10 9
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 34 0 23
+# CHECK-NEXT:  CZ 30 28 11 18 37 36 17 16 6 8 38 5 31 19 20 15 2 32 14 4 10 1
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 28 18 36 16 8 5 15 32 4 1
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CZ 30 15 11 4 37 23 17 1 6 34 38 32 31 16 20 8 2 28 14 0 10 36
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 15 4 23 1 34 32 21 7 35 30 11 37 17 6 38 31 20 2 14 10
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  M[{"qeci.message_type": "readout_send", "qeci.laddr": 0, "qeci.paddr": 5, "qeci.cast": 0}] 21 7 35 30 11 37 17 6 38 31 20 2 14 10
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 21 7 35 30 11 37 17 6 38 31 20 2 14 10
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  DETECTOR[{"neighbors": [23, 8\C, "basis": "X", "weight": 2}](0, 4, 0) rec[-14] rec[-22]
+# CHECK-NEXT:  DETECTOR[{"neighbors": [0, 34\C, "basis": "X", "weight": 2}](2, 0, 0) rec[-21] rec[-12]
+# CHECK-NEXT:  DETECTOR[{"neighbors": [32, 18, 28, 15\C, "basis": "X", "weight": 4}](4, 4, 0) rec[-20] rec[-11]
+# CHECK-NEXT:  DETECTOR[{"neighbors": [18, 4\C, "basis": "X", "weight": 2}](6, 2, 0) rec[-19] rec[-10]
+# CHECK-NEXT:  DETECTOR[{"neighbors": [15, 0, 8, 34\C, "basis": "X", "weight": 4}](2, 2, 0) rec[-7] rec[-18]
+# CHECK-NEXT:  DETECTOR[{"neighbors": [28, 23, 15, 8\C, "basis": "X", "weight": 4}](2, 4, 0) rec[-4] rec[-17]
+# CHECK-NEXT:  DETECTOR[{"neighbors": [18, 15, 4, 0\C, "basis": "X", "weight": 4}](4, 2, 0) rec[-15] rec[-2]
+# CHECK-NEXT:  DETECTOR[{"neighbors": [19, 16\C, "basis": "X", "weight": 2}](4, 10, 0) rec[-5]
+# CHECK-NEXT:  DETECTOR[{"neighbors": [5, 1, 32, 28\C, "basis": "X", "weight": 4}](4, 6, 0) rec[-16] rec[-3]
+# CHECK-NEXT:  DETECTOR[{"neighbors": [16, 9, 1, 36\C, "basis": "X", "weight": 4}](2, 8, 0) rec[-1]
+# CHECK-NEXT:  SHIFT_COORDS(0, 0, 1)
+# CHECK-NEXT:  REPEAT 2 {
+# CHECK-NEXT:      R 21 7 35 30 11 37 17 6 38 31 20 2 14 10
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      H 21 7 35 30 11 37 17 6 38 31 20 2 14 10 23 9 32 1 19 15
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      CZ 21 23 7 9 35 0 30 32 37 1 17 19 6 15 20 28 2 5 14 18 10 16
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      H 23 9 0 32 1 19 15 28 5 18 16 8 36
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      CZ 21 8 7 36 35 34 30 18 37 28 17 5 6 0 20 23 2 1 14 15 10 9
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      H 34 0 23
+# CHECK-NEXT:      CZ 30 28 11 18 37 36 17 16 6 8 38 5 31 19 20 15 2 32 14 4 10 1
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      H 28 18 36 16 8 5 15 32 4 1
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      CZ 30 15 11 4 37 23 17 1 6 34 38 32 31 16 20 8 2 28 14 0 10 36
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      H 15 4 23 1 34 32 21 7 35 30 11 37 17 6 38 31 20 2 14 10
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      M[{"qeci.message_type": "readout_send", "qeci.laddr": 0, "qeci.paddr": 5, "qeci.cast": 0}] 21 7 35 30 11 37 17 6 38 31 20 2 14 10
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      H 21 7 35 30 11 37 17 6 38 31 20 2 14 10
+# CHECK-NEXT:      DETECTOR[{"neighbors": [23, 8\C, "basis": "X", "weight": 2}](0, 4, 0) rec[-14] rec[-28]
+# CHECK-NEXT:      DETECTOR[{"neighbors": [9, 36\C, "basis": "X", "weight": 2}](0, 8, 0) rec[-13] rec[-27]
+# CHECK-NEXT:      DETECTOR[{"neighbors": [0, 34\C, "basis": "X", "weight": 2}](2, 0, 0) rec[-12] rec[-26]
+# CHECK-NEXT:      DETECTOR[{"neighbors": [32, 18, 28, 15\C, "basis": "X", "weight": 4}](4, 4, 0) rec[-11] rec[-25]
+# CHECK-NEXT:      DETECTOR[{"neighbors": [18, 4\C, "basis": "X", "weight": 2}](6, 2, 0) rec[-24] rec[-10]
+# CHECK-NEXT:      DETECTOR[{"neighbors": [1, 28, 36, 23\C, "basis": "X", "weight": 4}](2, 6, 0) rec[-23] rec[-9]
+# CHECK-NEXT:      DETECTOR[{"neighbors": [19, 5, 16, 1\C, "basis": "X", "weight": 4}](4, 8, 0) rec[-8] rec[-22]
+# CHECK-NEXT:      DETECTOR[{"neighbors": [15, 0, 8, 34\C, "basis": "X", "weight": 4}](2, 2, 0) rec[-7] rec[-21]
+# CHECK-NEXT:      DETECTOR[{"neighbors": [5, 32\C, "basis": "X", "weight": 2}](6, 6, 0) rec[-6] rec[-20]
+# CHECK-NEXT:      DETECTOR[{"neighbors": [19, 16\C, "basis": "X", "weight": 2}](4, 10, 0) rec[-5] rec[-19]
+# CHECK-NEXT:      DETECTOR[{"neighbors": [28, 23, 15, 8\C, "basis": "X", "weight": 4}](2, 4, 0) rec[-4] rec[-18]
+# CHECK-NEXT:      DETECTOR[{"neighbors": [5, 1, 32, 28\C, "basis": "X", "weight": 4}](4, 6, 0) rec[-3] rec[-17]
+# CHECK-NEXT:      DETECTOR[{"neighbors": [18, 15, 4, 0\C, "basis": "X", "weight": 4}](4, 2, 0) rec[-16] rec[-2]
+# CHECK-NEXT:      DETECTOR[{"neighbors": [16, 9, 1, 36\C, "basis": "X", "weight": 4}](2, 8, 0) rec[-15] rec[-1]
+# CHECK-NEXT:      SHIFT_COORDS(0, 0, 1)
+# CHECK-NEXT:  }
+# CHECK-NEXT:  R 7 20 38 37 17 31 2 10
+# CHECK-NEXT:  M[{"qeci.message_type": "readout_send", "qeci.laddr": 0, "qeci.paddr": 6, "qeci.cast": 0}] 0 34 4 15 18 8
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 7 20 38 37 17 31 2 10 9 1 19
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  OBSERVABLE_INCLUDE(0) rec[-16] rec[-13] rec[-20] rec[-17]
+# CHECK-NEXT:  CZ 7 9 20 28 37 1 17 19 2 5 10 16
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 9 28 1 19 5 16 36
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CZ 7 36 20 23 37 28 17 5 2 1 10 9
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 23 28 9
+# CHECK-NEXT:  CZ 38 5 37 36 17 16 31 19 2 32 10 1
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 5 36 16 19 32 1
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CZ 38 32 37 23 17 1 31 16 2 28 10 36
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 36 7 20 38 37 17 31 2 10
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  M[{"qeci.message_type": "readout_send", "qeci.laddr": 0, "qeci.paddr": 7, "qeci.cast": 0}] 7 20 38 37 17 31 2 10
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 7 20
+# CHECK-NEXT:  R 37 10 38 25 2 12 17 27 33 13 31
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "weight": 2, "neighbors": [9, 36\C}](0, 8, 0) rec[-8] rec[-27]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "weight": 4, "neighbors": [1, 28, 36, 23\C}](2, 6, 0) rec[-23] rec[-5]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "weight": 4, "neighbors": [19, 5, 16, 1\C}](4, 8, 0) rec[-22] rec[-4]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "weight": 2, "neighbors": [5, 32\C}](6, 6, 0) rec[-6] rec[-20]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "weight": 2, "neighbors": [19, 16\C}](4, 10, 0) rec[-3] rec[-19]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "weight": 4, "neighbors": [5, 1, 32, 28\C}](4, 6, 0) rec[-2] rec[-17]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "weight": 4, "neighbors": [16, 9, 1, 36\C}](2, 8, 0) rec[-15] rec[-1]
+# CHECK-NEXT:  DETECTOR[{"coeff": 1.0, "basis": "X", "boundary": false, "note": null}](2, 0, 0) rec[-14] rec[-13] rec[-26]
+# CHECK-NEXT:  DETECTOR[{"coeff": 1.0, "basis": "X", "boundary": false, "note": null}](2, 4, 0) rec[-7] rec[-11] rec[-18] rec[-9]
+# CHECK-NEXT:  DETECTOR[{"coeff": 1.0, "basis": "X", "boundary": false, "note": null}](4, 2, 0) rec[-16] rec[-14] rec[-12] rec[-11] rec[-10]
+# CHECK-NEXT:  SHIFT_COORDS(0, 0, 1)
+# CHECK-NEXT:  H 37 10 38 25 2 12 17 27 33 13 31
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CZ 37 23 10 36 38 32 25 9 28 2 17 1 27 19 5 13 16 31
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 10 9 28 1 19 5 16
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CZ 9 10 28 37 1 2 19 13 5 17 16 25
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 37 2
+# CHECK-NEXT:  CZ 12 13 1 10 19 31 33 27 5 38 16 17
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 10 31 27 38 17
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CZ 12 38 1 37 19 17 33 31 5 2 16 10
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 37 17 31 2 10 23 36 32 9 28 12 1 19 33 5 16
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  M[{"qeci.message_type": "readout_send", "qeci.laddr": 0, "qeci.paddr": 8, "qeci.cast": 0}] 23 36 32 9 28 12 1 19 33 5 16
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 28 12
+# CHECK-NEXT:  R 1 5 33 22 3 29 19 9 16 24 36
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "boundary": true, "coeff": 1.0, "note": null}](0, 8, 0) rec[-8] rec[-19]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "boundary": false, "coeff": 1.0, "note": null}](2, 4, 0) rec[-7] rec[-11] rec[-18]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "boundary": true, "coeff": 1.0, "note": null}](6, 6, 0) rec[-6] rec[-17]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "boundary": true, "coeff": 1.0, "note": null}](2, 6, 0) rec[-16] rec[-5]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "boundary": true, "coeff": 1.0, "note": null}](4, 8, 0) rec[-15] rec[-4]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "boundary": true, "coeff": 1.0, "note": null}](4, 10, 0) rec[-14] rec[-3]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "boundary": false, "coeff": 1.0, "note": null}](4, 6, 0) rec[-13] rec[-2] rec[-9]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "boundary": false, "coeff": 1.0, "note": null}](2, 8, 0) rec[-12] rec[-1] rec[-10]
+# CHECK-NEXT:  SHIFT_COORDS(0, 0, 1)
+# CHECK-NEXT:  H 1 5 33 22 3 29 19 9 16 24 36
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CZ 1 2 5 38 33 27 29 31 19 13 9 10 17 16 25 24 37 36
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 5 33 31 13 10 17 25 37
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CZ 31 16 13 5 10 36 17 19 25 29 37 1
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 5 19
+# CHECK-NEXT:  CZ 22 24 3 29 31 33 10 16 17 1 25 9
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 33 16 1 9
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  CZ 22 9 3 33 31 19 10 1 17 5 25 16
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 2 38 27 22 3 31 13 10 17 25 37 33 5 16 29
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  M[{"qeci.message_type": "readout_send", "qeci.laddr": 0, "qeci.paddr": 9, "qeci.cast": 0}] 2 38 27 22 3 31 13 10 17 25 37 33 24 1 5 36 16 19 9 29
+# CHECK-NEXT:  TICK
+# CHECK-NEXT:  H 22 3 31 13 10 17 25 37 33 24 1 5 36 16 19 9 29
+# CHECK-NEXT:  DETECTOR[{"boundary": true, "basis": "X", "coeff": 1.0, "note": null}](1, 9, 0) rec[-28] rec[-17]
+# CHECK-NEXT:  DETECTOR[{"boundary": false, "basis": "X", "coeff": 1.0, "note": null}](3, 5, 0) rec[-20] rec[-27] rec[-10]
+# CHECK-NEXT:  DETECTOR[{"boundary": true, "basis": "X", "coeff": 1.0, "note": null}](7, 7, 0) rec[-14] rec[-26]
+# CHECK-NEXT:  DETECTOR[{"boundary": true, "basis": "X", "coeff": 1.0, "note": null}](3, 7, 0) rec[-13] rec[-25]
+# CHECK-NEXT:  DETECTOR[{"boundary": true, "basis": "X", "coeff": 1.0, "note": null}](5, 9, 0) rec[-24] rec[-15]
+# CHECK-NEXT:  DETECTOR[{"boundary": false, "basis": "X", "coeff": 1.0, "note": null}](5, 11, 0) rec[-16] rec[-23] rec[-18]
+# CHECK-NEXT:  DETECTOR[{"boundary": false, "basis": "X", "coeff": 1.0, "note": null}](5, 7, 0) rec[-19] rec[-22] rec[-12] rec[-20]
+# CHECK-NEXT:  DETECTOR[{"boundary": true, "basis": "X", "coeff": 1.0, "note": null}](3, 9, 0) rec[-21] rec[-11]
+# CHECK-NEXT:  SHIFT_COORDS(0, 0, 1)
+# CHECK-NEXT:  OBSERVABLE_INCLUDE(0) rec[-7] rec[-6] rec[-5]
+# CHECK-NEXT:  DETECTOR[{"basis": "Z", "coeff": 1.0, "boundary": false, "note": null}](1, 9, 0) rec[-8] rec[-2] rec[-17]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "coeff": 1.0, "boundary": false, "note": null}](5, 9, 0) rec[-15] rec[-9] rec[-4] rec[-3] rec[-1]
+# CHECK-NEXT:  DETECTOR[{"basis": "X", "coeff": 1.0, "boundary": false, "note": null}](7, 7, 0) rec[-6] rec[-14] rec[-3]
+# CHECK-NEXT:  DETECTOR[{"basis": "Z", "coeff": 1.0, "boundary": false, "note": null, "label": "#Z"}](3, 7, 0) rec[-13] rec[-7] rec[-5] rec[-4] rec[-2]
+# CHECK-NEXT:  SHIFT_COORDS(0, 0, 1)

@@ -1,0 +1,84 @@
+name: Release deltakit-compile
+
+on:
+  push:
+    branches:
+      - 'main'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Do a dry run (no tag, or Github release)"
+        required: true
+        type: boolean
+        default: false
+
+jobs:
+  check_new_version:
+    runs-on: ubuntu-latest
+    outputs:
+      is_new_version: ${{ steps.check_version.outputs.is_new_version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Check package version
+        id: check_version
+        run: |
+          TAG_VERSIONS=$(git tag -l --sort -version:refname)
+          echo "Existing version tags: $TAG_VERSIONS"
+          PACKAGE_VERSION=$(uv version --short)
+          echo "Package version: $PACKAGE_VERSION"
+
+          found=false
+          for tag in $TAG_VERSIONS; do
+            ver="${tag#v}"
+            if [[ "$ver" == "$PACKAGE_VERSION" ]]; then
+              found=true
+              break
+            fi
+          done
+
+          if $found; then
+            echo "is_new_version=false" >> $GITHUB_OUTPUT
+            echo "No new version found"
+          else
+            echo "is_new_version=true" >> $GITHUB_OUTPUT
+            echo "New version found"
+          fi
+
+  unit_tests:
+    uses: ./.github/workflows/pull_request.yml
+    with:
+      publish_dev_version: ${{ github.event_name == 'push' && ! inputs.dry_run }}
+    secrets: inherit
+
+  release:
+    needs: [check_new_version, unit_tests]
+    runs-on: ubuntu-latest
+    if: ${{ needs.check_new_version.outputs.is_new_version == 'true' && ! inputs.dry_run }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Get package version
+        run: echo "PACKAGE_VERSION=$(uv version --short)" >> $GITHUB_ENV
+
+      - name: Build and publish wheel
+        run: |
+          uv build
+          uv publish
+
+      - name: Make github release
+        uses: ncipollo/release-action@v1.14.0
+        with:
+          tag: v${{ env.PACKAGE_VERSION }}
+          commit: ${{ github.sha }}
+          generateReleaseNotes: true
+          allowUpdates: true
+          artifacts: "dist/*"

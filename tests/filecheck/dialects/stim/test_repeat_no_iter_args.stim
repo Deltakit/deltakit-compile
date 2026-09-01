@@ -1,0 +1,58 @@
+# RUN: ROUNDTRIP_STIM
+
+# Tests for REPEATs with no iter_args
+REPEAT 10 {
+    REPEAT 5 {
+        M 10
+    }
+}
+
+# CHECK:       REPEAT 10 {
+# CHECK-NEXT:      REPEAT 5 {
+# CHECK-NEXT:          M 10
+# CHECK-NEXT:      }
+# CHECK-NEXT:  }
+
+REPEAT 2 {
+    M 1
+    REPEAT 1 {
+        X 10
+    }
+    M 1
+}
+
+# CHECK-NEXT:  REPEAT 2 {
+# CHECK-NEXT:      M 1
+# CHECK-NEXT:      REPEAT 1 {
+# CHECK-NEXT:          X 10
+# CHECK-NEXT:      }
+# CHECK-NEXT:      M 1
+# CHECK-NEXT:  }
+
+X 1
+REPEAT 1 {
+    TICK
+}
+M 1
+
+# CHECK-NEXT:  X 1
+# CHECK-NEXT:  REPEAT 1 {
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:  }
+# CHECK-NEXT:  M 1
+
+X 1
+REPEAT 1 {
+    TICK
+    M 1
+    DETECTOR(0.0, 1.0) rec[-1]
+}
+M 1
+
+# CHECK-NEXT:  X 1
+# CHECK-NEXT:  REPEAT 1 {
+# CHECK-NEXT:      TICK
+# CHECK-NEXT:      M 1
+# CHECK-NEXT:      DETECTOR(0, 1) rec[-1]
+# CHECK-NEXT:  }
+# CHECK-NEXT:  M 1
