@@ -1,0 +1,73 @@
+# RUN: deltakit_compile deltakit-stim parse %s -O %t.mlir
+# RUN: deltakit_compile compile-passes %t.mlir -t -p add-noise --pass-args '{ \
+# RUN:      "noise_model": "{ \
+# RUN:          name: SI1000NoResetWithGateTimingsNoiseConfig, \
+# RUN:          p: 0.01 \
+# RUN:      }" \
+# RUN:  }' -O %t.2.mlir
+# RUN: deltakit_compile deltakit-stim print %t.2.mlir -O %t.stim
+# RUN: filecheck %s --input-file %t.stim
+
+M 0 3
+CX 1 2
+TICK
+
+# CHECK-NEXT: X_ERROR(0.0408163) 0 3
+# CHECK-NEXT: M(0.01) 0 3
+# CHECK-NEXT: CX 1 2
+# CHECK-NEXT: DEPOLARIZE2(0.01) 1 2
+# CHECK-NEXT: DEPOLARIZE1(0.02) 1 2
+# CHECK-NEXT: TICK
+
+M 0 3
+CX 1 2
+CX 1 2
+TICK
+
+# CHECK-NEXT: X_ERROR(0.0408163) 0 3
+# CHECK-NEXT: M(0.01) 0 3
+# CHECK-NEXT: CX 1 2 1 2
+# CHECK-NEXT: DEPOLARIZE2(0.01) 1 2 1 2
+# CHECK-NEXT: DEPOLARIZE1(0.001) 0 3
+# CHECK-NEXT: DEPOLARIZE1(0.02) 1 2
+# CHECK-NEXT: TICK
+
+M 0 3
+CX 1 2
+CX 1 2
+CX 1 2
+TICK
+
+# CHECK-NEXT: X_ERROR(0.0408163) 0 3
+# CHECK-NEXT: M(0.01) 0 3
+# CHECK-NEXT: CX 1 2 1 2 1 2
+# CHECK-NEXT: DEPOLARIZE2(0.01) 1 2 1 2 1 2
+# CHECK-NEXT: DEPOLARIZE1(0.001) 0 3
+# CHECK-NEXT: DEPOLARIZE1(0.02) 1 2
+# CHECK-NEXT: TICK
+
+RX 0 1
+CX 2 3
+H 3
+TICK
+
+# CHECK-NEXT: RX 0 1
+# CHECK-NEXT: Z_ERROR(0.02) 0 1
+# CHECK-NEXT: CX 2 3
+# CHECK-NEXT: DEPOLARIZE2(0.01) 2 3
+# CHECK-NEXT: H 3
+# CHECK-NEXT: DEPOLARIZE1(0.001) 3 0 1 2
+# CHECK-NEXT: DEPOLARIZE1(0.02) 2 3
+# CHECK-NEXT: TICK
+
+X 2
+MPP X0*X1
+TICK
+
+# CHECK-NEXT: X 2
+# CHECK-NEXT: DEPOLARIZE1(0.001) 2
+# CHECK-NEXT: Z_ERROR(0.0408163) 0 1
+# CHECK-NEXT: MPP(0.01) X0*X1
+# CHECK-NEXT: DEPOLARIZE1(0.02) 2 3
+# CHECK-NEXT: DEPOLARIZE1(0.001) 3
+# CHECK-NEXT: TICK

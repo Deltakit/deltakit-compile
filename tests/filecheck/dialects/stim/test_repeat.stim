@@ -1,0 +1,56 @@
+# RUN: ROUNDTRIP_STIM
+
+# Test case showing measurements being passed into a REPEAT where no new measurements are appended
+M 0
+REPEAT 2 {
+    DETECTOR(0, 0) rec[-1]
+}
+
+# CHECK:       M 0
+# CHECK-NEXT:  REPEAT 2 {
+# CHECK-NEXT:      DETECTOR(0, 0) rec[-1]
+# CHECK-NEXT:  }
+
+# Test case showing measurements taken before a REPEAT accessed after it
+M 0 1
+REPEAT 2 {
+    CZ 0 1
+    M 0 1
+}
+DETECTOR(0, 0) rec[-6]
+
+# CHECK:       M 0 1
+# CHECK-NEXT:  REPEAT 2 {
+# CHECK-NEXT:      CZ 0 1
+# CHECK-NEXT:      M 0 1
+# CHECK-NEXT:  }
+# CHECK-NEXT:  DETECTOR(0, 0) rec[-6]
+
+# Test case showing nested REPEATs interacting with the measurement record
+R 0 1 2 3
+CZ 0 3 1 2
+M 3 2
+DETECTOR(0, 0) rec[-2]
+REPEAT 10 {
+    REPEAT 5 {
+        CZ 0 3 1 2
+        M 3 2
+        DETECTOR(0, 0) rec[-2] rec[-4]
+        SHIFT_COORDS(0, 1)
+    }
+}
+DETECTOR(0, 0) rec[-5] rec[-1]
+
+# CHECK:       R 0 1 2 3
+# CHECK-NEXT:  CZ 0 3 1 2
+# CHECK-NEXT:  M 3 2
+# CHECK-NEXT:  DETECTOR(0, 0) rec[-2]
+# CHECK-NEXT:  REPEAT 10 {
+# CHECK-NEXT:      REPEAT 5 {
+# CHECK-NEXT:          CZ 0 3 1 2
+# CHECK-NEXT:          M 3 2
+# CHECK-NEXT:          DETECTOR(0, 0) rec[-2] rec[-4]
+# CHECK-NEXT:          SHIFT_COORDS(0, 1)
+# CHECK-NEXT:      }
+# CHECK-NEXT:  }
+# CHECK-NEXT:  DETECTOR(0, 0) rec[-5] rec[-1]

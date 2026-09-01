@@ -1,116 +1,146 @@
 name: Pull Request
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
-    types: [opened, synchronize, reopened, labeled]
+    branches: [main]
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      publish_dev_version:
+        description: "Publish the generated dev version nowhere"
+        default: false
+        required: false
+        type: boolean
 
 jobs:
-  # Build wheels.
-  build-wheels:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
+      - uses: actions/checkout@v6
+
       - name: Install uv
         uses: astral-sh/setup-uv@v7
-      - name: Build deltakit-compile wheel
-        run: uv build --no-sources .
-      - name: Upload wheels artefacts
-        uses: actions/upload-artifact@v7
+
+      - name: Build deltakit-compile
+        run: uv build
+
+      - name: Upload deltakit-compile-wheel
+        uses: actions/upload-artifact@v4
         with:
-          name: deltakit-compile-wheels
-          path: ./dist/*.whl
+          name: deltakit-compile-wheel
+          path: |
+            ./dist/*.whl
           retention-days: 7
 
-  # Test the built wheels.
-  tests-wheels:
-    needs: [build-wheels]
+  tests:
+    needs: build
     strategy:
       matrix:
         python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
         dependency-resolution: ['highest', 'lowest-direct']
-    name: Test deltakit-compile on ${{ matrix.python-version }} with ${{matrix.dependency-resolution}}
     env:
-      ENABLE_COVERAGE: ${{ (matrix.python-version == '3.10') && (matrix.dependency-resolution == 'highest') }}
+      COVERAGE: ${{ (matrix.python-version == '3.10') && (matrix.dependency-resolution == 'highest') }}
       # See https://github.com/orgs/community/discussions/25217
       PR_FROM_FORK: ${{ github.event.pull_request.head.repo.full_name != github.repository }}
       PR_FROM_DEPENDABOT: ${{ startsWith(github.head_ref, 'dependabot/' )}}
+    continue-on-error: ${{ matrix.python-version == 3.14 }}
+    name: tests (${{ matrix.python-version }}, ${{matrix.dependency-resolution}})
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
+      - uses: actions/checkout@v4
+
       - name: Install uv
         uses: astral-sh/setup-uv@v7
-      - name: Download wheels
-        uses: actions/download-artifact@v8
         with:
-          name: deltakit-compile-wheels
-          path: ./dist
-      - name: Setup and sync venv for testing deltakit-compile
-        run: |
-          uv sync --python ${{ matrix.python-version }} --resolution ${{matrix.dependency-resolution}} --group test
-          uv pip install ./dist/*.whl
-      - name: Test deltakit-compile
-        env:
-          COVERAGE_ARGS: ${{env.ENABLE_COVERAGE == 'true' && '--cov deltakit_compile --cov-config pyproject.toml --cov-report xml:coverage.xml' || ''}}
-        run: |
-          uv run --python ${{ matrix.python-version }} --no-sync pytest $COVERAGE_ARGS tests/
-      # Temporary disabling as it makes CI fail.
-      # - name: Export coverage data to XML and report
-      #   if: ${{ env.ENABLE_COVERAGE == 'true' }}
-      #   run: |
-      #     uv run --no-sync coverage xml
-      #     uv run --no-sync coverage report
-      # - name: Printing coverage report as a message
-      #   if: ${{ env.ENABLE_COVERAGE == 'true' && env.PR_FROM_FORK == 'false' && env.PR_FROM_DEPENDABOT == 'false' }}
-      #   uses: 5monkeys/cobertura-action@v13
-      #   with:
-      #     repo_token : ${{ secrets.GITHUB_TOKEN }}
-      #     path: ./coverage.xml
-      #     skip_covered: true
-      #     minimum_coverage: 95
-      #     fail_below_threshold: false
-      #     show_missing: true
-      #     link_missing_lines: true
-      #     link_missing_lines_source_dir: ''
-      #     only_changed_files: true
+          python-version: ${{ matrix.python-version }}
 
-  # Perform static check on each deltakit-compile project package.
+      - name: Download deltakit-compile-wheel
+        uses: actions/download-artifact@v4
+        with:
+          name: deltakit-compile-wheel
+          path: ./dist
+
+      - name: Setup venv
+        run: |
+          uv sync --python ${{ matrix.python-version }} --resolution ${{matrix.dependency-resolution}} \
+            --group test --group examples
+          uv pip install dist/*.whl
+
+      - name: Run pytest
+        env:
+          COVERAGE_ARGS: ${{env.COVERAGE == 'true' && '--cov deltakit_compile --cov-config pyproject.toml --cov-report term-missing' || ''}}
+        run: |
+          uv run --python ${{ matrix.python-version }} --no-sync \
+            pytest -ra tests/unit $COVERAGE_ARGS
+
+      - name: Run lit/filecheck
+        env:
+          COVERAGE_ARGS: ${{env.COVERAGE == 'true'  && '-DCOVERAGE=src/deltakit_compile' || ''}}
+        run: |
+          uv run --python ${{ matrix.python-version }} --no-sync \
+            lit -v $COVERAGE_ARGS tests/filecheck
+
+      - name: Combine coverage
+        if: ${{env.COVERAGE == 'true'}}
+        run: |
+          uv run --no-sync coverage combine --append
+          uv run --no-sync coverage xml
+          uv run --no-sync coverage report
+
+      - name: Collecting coverage
+        if: ${{ env.COVERAGE == 'true' && env.PR_FROM_FORK == 'false' && env.PR_FROM_DEPENDABOT == 'false' }}
+        uses: 5monkeys/cobertura-action@v13
+        with:
+          repo_token : ${{ secrets.GITHUB_TOKEN }}
+          path: coverage.xml
+          minimum_coverage: 95
+          show_missing: true
+          link_missing_lines: true
+          link_missing_lines_source_dir: ''
+          fail_below_threshold: true
+          only_changed_files: true
+
   static-checks:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
+      - uses: actions/checkout@v4
+
       - name: Install uv
         uses: astral-sh/setup-uv@v7
+
       - name: Setup venv
-        run: uv sync --group=lint --group=security
+        run: uv sync --group lint --group security
+
       - name: Check for typos
         run: uv run --no-sync typos
+        if: ${{ always() }}
+
       - name: Run `ruff` syntax checker
         run: uv run --no-sync ruff check
         if: ${{ always() }}
+
       - name: Run `ruff` formatting
         run: uv run --no-sync ruff format --check
         if: ${{ always() }}
+
       - name: Run `pydoclint` documentation formatting
         run: uv run --no-sync pydoclint .
         if: ${{ always() }}
+
       - name: Run `mypy` type checker
         run: uv run --no-sync mypy
         if: ${{ always() }}
+
       - name: Run `deptry` for dependency hygiene
         run: uv run --no-sync deptry src/
         if: ${{ always() }}
-      - name: Run `bandit` for code vulnerabilities
-        run: uv run --no-sync bandit .
+
+      - name: Running Bandit
+        run: uv run --no-sync bandit -r src/ -n 3 -c pyproject.toml
         if: ${{ always() }}
-      - name: Run `pip_audit` to check dependencies for known vulnerabilities
-        # Ignore CVE-2025-53000 as it only affects `nbconvert` on Windows.
-        # `nbconvert` is only used for documentation building on Linux.
-        # Remove when https://github.com/jupyter/nbconvert/issues/2258 is fixed.
-        run: uv run --no-sync pip-audit --ignore-vuln CVE-2025-53000
+
+      - name: Running Pip-audit
+        run: |
+          uv pip install --upgrade pip
+          uv run --no-sync pip-audit
         if: ${{ always() }}

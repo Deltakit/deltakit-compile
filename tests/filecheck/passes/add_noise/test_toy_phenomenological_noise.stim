@@ -1,0 +1,46 @@
+# RUN: deltakit_compile deltakit-stim parse %s -O %t.mlir
+# RUN: deltakit_compile compile-passes %t.mlir -t -p add-noise --pass-args '{ \
+# RUN:      "noise_model": "{ \
+# RUN:          name: ToyPhenomenologicalNoiseConfig, \
+# RUN:          p: 0.01, \
+# RUN:          p_measurement_flip: 0.02 \
+# RUN:      }" \
+# RUN:  }' -O %t.2.mlir
+# RUN: deltakit_compile deltakit-stim print %t.2.mlir -O %t.stim
+# RUN: filecheck %s --input-file %t.stim
+
+I 0 1 2 3
+TICK
+
+# CHECK:      I 0 1 2 3
+# CHECK-NEXT: DEPOLARIZE1(0.01) 0 1 2 3
+# CHECK-NEXT: TICK
+
+MX 0
+MY 1
+MZ 2
+TICK
+
+# CHECK-NEXT: MX(0.02) 0
+# CHECK-NEXT: MY(0.02) 1
+# CHECK-NEXT: M(0.02) 2
+# CHECK-NEXT: TICK
+
+X 2
+MPP X0*X1
+RZ 3
+TICK
+CX 0 1
+I 2
+MY 3
+TICK
+
+# CHECK-NEXT: X 2
+# CHECK-NEXT: MPP(0.02) X0*X1
+# CHECK-NEXT: R 3
+# CHECK-NEXT: TICK
+# CHECK-NEXT: CX 0 1
+# CHECK-NEXT: I 2
+# CHECK-NEXT: DEPOLARIZE1(0.01) 2
+# CHECK-NEXT: MY(0.02) 3
+# CHECK-NEXT: TICK

@@ -1,20 +1,13 @@
-[build-system]
-requires = ["setuptools>=80"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "deltakit-compile"
-version = "0.9.1"
-description = "Deltakit (component deltakit-compile)"
+version = "0.1.0"
+description = "A compiler toolkit for quantum error correction"
 readme = "README.md"
-requires-python = ">=3.10, <3.15"
-license = "Apache-2.0"
-license-files = ["LICENSE"]
-
 authors = [{ name = "Deltakit Team", email = "deltakit@riverlane.com" }]
+requires-python = ">=3.10,<3.15"
 
 classifiers = [
-  "Development Status :: 1 - Planning",
+  "Development Status :: 4 - Beta",
   "Intended Audience :: Science/Research",
   "Intended Audience :: Developers",
   "Operating System :: OS Independent",
@@ -30,74 +23,103 @@ classifiers = [
   "Typing :: Typed",
 ]
 
-dependencies = []
-
-[project.urls]
-Homepage = "https://github.com/Deltakit/deltakit"
-"Bug Tracker" = "https://github.com/Deltakit/deltakit/issues"
-Changelog = "https://github.com/Deltakit/deltakit/releases"
-
-[dependency-groups]
-test = [
+dependencies = [
+  "xdsl>=0.66,<0.69",
+  "typer>=0.15.4,<0.27",
+  "pyyaml >=6.0.3, <7",
+  "pydantic >=2.11.0a1, <3",
+  "pydantic >=2.12, <3; python_version >= '3.14'",
+  "pydantic-core >=2.28, <3",
   "numpy >=1.25, <3",
   "numpy >=1.26, <3; python_version >= '3.12'",
   "numpy >=2.1, <3; python_version >= '3.13'",
   "numpy >=2.3.4, <3; python_version >= '3.14'",
-  "pytest >=9.0, <10",
-  "pytest-cov >=7, <8",
-  "pytest-skip-slow>=0.0.5,<1.2",
-  "coverage >=7.7.0, <8",
-  "pytest-mock>=3.14",
-  "pytest-lazy-fixtures>=1.0",
+  "deltakit-stim >=0.2.2, <0.3",
+  "typing_extensions >=4.15, <5",
 ]
+
+[dependency-groups]
+examples = [
+  "ipykernel>=6.29.5,<8",
+  "stim >=1.14, <2",
+  "stim >=1.15, <2; python_version >= '3.13'",
+  "stim >=1.16, <2; python_version >= '3.14'",
+]
+test = [
+  "pytest >=8.4.0, <10",
+  "pytest-cov >=4.0.0, <8",
+  "pytest-mock >=3.14.0, <4",
+  "pytest-xdist >=3.8.0, <4",
+  "pytest-json-report >=1.5.0, <2",
+  "filecheck >=1.0.3, <2",
+  "filecheckize >=0.2, <0.3",
+  "lit >=18.1.8, <19",
+  "nbclient>=0.10.2,<0.12",
+  "coverage >=7.7.0, <8",
+  "packaging >=25.0, <27",
+  { include-group = "examples" },
+]
+typing = ["types-PyYAML >=5.4.2, <6"]
 lint = [
-  "mypy>=1.17,<3.0",
-  "ruff==0.16.0",
+  { include-group = "typing" },
+  "mypy>=2.2.0,<3",
+  "types-networkx >=3.1, <4",
+  "ruff==0.15.19",
   "typos >=1.34, <2",
   "deptry>=0.23,<0.26",
-  "pydoclint>=0.9,<0.10",
+  "pydoclint >=0.8.6, <0.9",
 ]
-security = ["bandit[toml] >=1.8, <2", "pip-audit >=2.7, <3"]
+licences = ["pip-licenses >=3.5.3, <6"]
+security = [
+  "bandit[toml] >=1.7.5, <2",
+  "pip-audit>=2.8.0, <3",
+  "ochrona >=2.0.2, <3",
+]
+
 dev = [
   { include-group = "test" },
   { include-group = "lint" },
   { include-group = "security" },
   "pre-commit >=4.2, <5",
-  "validate-pyproject >=0.24.1,<0.26",
-]
-release = [
-  "python-semantic-release >=10.6.1, <11",
-  "packaging >=25.0, <27",
-  "requests>=2.32.0",
-  "tomlkit<0.16,>=0.13",
+  "validate-pyproject >=0.24.1, <0.26.0",
 ]
 
-[tool.deptry]
-known_first_party = ["deltakit_compile"]
+[project.scripts]
+deltakit_compile = "deltakit_compile.cli:app"
+
+[project.urls]
+Homepage = "https://github.com/Deltakit/deltakit-compile"
+Source = "https://github.com/Deltakit/deltakit-compile"
+Documentation = "https://deltakit.riverlane.com/"
+Issues = "https://github.com/Deltakit/deltakit-compile/issues"
+Changelog = "https://github.com/Deltakit/deltakit-compile/releases"
+
+[tool.uv.build-backend]
+module-name = "deltakit_compile"
+module-root = "src"
+
+[build-system]
+requires = ["uv_build>=0.9.15"]
+build-backend = "uv_build"
 
 [tool.mypy]
-files = "src/**/*.py"
+files = ["src/**/*.py", "tests/unit/**/*.py"]
+enable_error_code = ["deprecated"]
 
-[tool.pytest.ini_options]
-testpaths = ["./tests/"]
+[[tool.mypy.overrides]]
+module = ["stim"]
+follow_untyped_imports = true
 
-[tool.pydoclint]
-style = 'google'
-exclude = '\.git|\.venv.*'
-# We do not want type hints to be duplicated in docstrings.
-arg-type-hints-in-docstring = false
-check-return-types = false
-check-yield-types = false
-# Ensure that Google style is used
-check-style-mismatch = true
-# Short docstrings are an open door for circumventing the linter.
-skip-checking-short-docstrings = false
-# For the moment, we have a baseline of documentation format errors. Eventually, this will
-# be removed.
-baseline = ".pydoclint_baseline.txt"
+[[tool.mypy.overrides]]
+module = ["deltakit-stim"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["deltakit_compile.*"]
+disable_error_code = ["type-abstract"]
+enable_error_code = ["explicit-override"]
 
 [tool.typos.default]
-locale = 'en-gb'
 extend-ignore-re = [
   # Ignore jupyter notebook cell IDs
   "\"id\"\\s*:\\s*\"[0-9a-f]{8,}\"",
@@ -109,35 +131,52 @@ iy = "iy"
 iz = "iz"
 IZ = "IZ"
 anc = "anc"
-BA = "BA"
-youre = "you're"
-distribtuion = "distribution"
-interm = "interm"
-ket = "ket"
-ND = "ND"                         # part of NDArray
-Alise = "Alise"
-DEPOLARIZE = "DEPOLARIZE"
-depolarization = "depolarization"
-depolarizing = "depolarizing"
-Authorization = "Authorization"   # Web-related field.
-color = "color"                   # Used in matplotlib and stim APIs.
-colors = "colors"
-optimize = "optimize"             # scipy.optimize
-ax = "ax"                         # Typical naming for matplotlib Axes instances.
-center = "center"
-stabilizer = "stabilizer"
-stabilizers = "stabilizers"
-synchronize = "synchronize"       # multiprocessing import
-neighbors = "neighbors"
-capitalize = "capitalize"
-labeled = "labeled"
-labeler = "labeler"
-unrealized = "unrealized"
-writeable = "writeable"           # Used in numpy APIs.
-CPY = "CPY"                       # A ruff rule identifier
-minimize = "minimize"
-Normalize = "Normalize"
+writeable = "writeable" # Used in numpy APIs.
+CPY = "CPY"             # A ruff rule identifier
+ser = "ser"             # Used by a pydantic function.
 
-[tool.typos.files]
-# Paths/patterns to exclude from spell checking
-extend-exclude = ["**/LICENSE", "**/*.html"]
+[tool.deptry]
+known_first_party = ["deltakit_compile"]
+extend_exclude = ["examples"]
+
+[tool.deptry.per_rule_ignores]
+DEP001 = ['deltakit-stim']
+
+[tool.bandit]
+exclude_dirs = ['.github', '.venv', '**/lit.cfg.py']
+skips = [
+  'B101', # We are happy to use asserts as part of defensive programming
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests/unit"]
+filterwarnings = [
+  "ignore:cannot collect test class 'TestOp' because it has a __init__ constructor:pytest.PytestCollectionWarning",
+  "ignore:cannot collect test class 'TestTermOp' because it has a __init__ constructor:pytest.PytestCollectionWarning",
+  "ignore:cannot collect test class 'TestType' because it has a __init__ constructor:pytest.PytestCollectionWarning",
+]
+
+[tool.coverage.report]
+exclude_also = ["raise NotImplementedError", "return NotImplemented"]
+
+[tool.coverage.paths]
+source = [
+  "src/deltakit_compile",
+  ".venv/lib/python*/site-packages/deltakit_compile",
+]
+
+[tool.pydoclint]
+style = 'google'
+exclude = '\.git|\.venv.*'
+# We do not want type hints to be duplicated in docstrings.
+arg-type-hints-in-docstring = false
+check-return-types = false
+check-yield-types = false
+# Ensure that Google style is used
+check-style-mismatch = true
+# Empty yields or returns do not have to be documented.
+require-yield-section-when-yielding-nothing = false
+require-return-section-when-returning-nothing = false
+# The raise checks are oddly restrictive - forcing us to document exceptions in the function
+# body and nothing more.
+skip-checking-raises = true

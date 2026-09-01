@@ -1,0 +1,33 @@
+# RUN: deltakit_compile deltakit-stim parse %s -O %t.mlir
+# RUN: deltakit_compile compile-passes %t.mlir -t -p add-noise --pass-args '{ \
+# RUN:      "noise_model": "{ \
+# RUN:          name: GateNoiseConfig, \
+# RUN:          measurement: { \
+# RUN:              MX: {bit_flip_p: 0.1}, \
+# RUN:              MY: {bit_flip_p: 0.5}, \
+# RUN:              MZ: {bit_flip_p: 0.2} \
+# RUN:          } \
+# RUN:      }" \
+# RUN:  }' -O %t.2.mlir
+# RUN: deltakit_compile deltakit-stim print %t.2.mlir -O %t.stim
+# RUN: filecheck %s --input-file %t.stim
+
+MPP X0*Z1
+TICK
+
+# CHECK: MPP(0.26) X0*Z1
+# CHECK: TICK
+
+MPP X0*X1*X2
+TICK
+
+# CHECK: MPP(0.1) X0*X1*X2
+# CHECK: TICK
+
+MPP X0 Z1*X0*Z2 X2*Y3
+TICK
+
+# CHECK: MPP(0.1) X0
+# CHECK: MPP(0.356) Z1*X0*Z2
+# CHECK: MPP(0.5) X2*Y3
+# CHECK: TICK

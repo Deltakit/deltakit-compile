@@ -42,7 +42,7 @@ exclude = [
     "site-packages",
     "venv",
     "_version.py",
-    # Specific to dkit-compile
+    # Specific to deltakit-compile
     "tests/filecheck/lit.cfg.py",
 ]
 
@@ -140,11 +140,12 @@ ignore = [
 "tests/unit/passes/stabiliser/test_common.py" = ["N802"]
 # Printing is common and expected in examples
 "examples/**" = ["T201"]
+# Tooling might move elsewhere eventually, but for the moment that is fine to print, and no
+"tools/**" = ["T201"]
 
 [lint.flake8-copyright]
 # Ruff configuration for enforcing copyright notices (https://docs.astral.sh/ruff/rules/missing-copyright-notice/)
-# We are enforcing the style presented in https://riverlane.atlassian.net/wiki/x/VgBJhg
-notice-rgx = "(?i)\\(c\\) Copyright Riverlane \\d{4}-2026. All rights reserved."
+notice-rgx = "(?i)\\(c\\) Copyright Riverlane 2025-2026. All rights reserved."
 # Avoid enforcing a header on empty (<10 bytes) files
 min-file-size = 10
 

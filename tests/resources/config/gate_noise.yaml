@@ -1,0 +1,47 @@
+name: GateNoiseConfig
+initialisation:
+  0:
+    - "OneQubitPauliNoise 5e-3 0 0"
+gates:
+  "H":
+    after:
+      - "OneQubitDepolarisingNoise 1e-3"
+  "H 0":
+    after:
+      - "OneQubitDepolarisingNoise 3e-3"
+      - "OneQubitPauliNoise 1e-3 2e-3 3e-3"
+  "CX":
+    after:
+      - "OneQubitDepolarisingNoise 3e-3"
+  "CX 1 0":
+    after:
+      - "OneQubitDepolarisingNoise 2e-3"
+      - "TwoQubitDepolarisingNoise 1e-3"
+measurement:
+  "MZ":
+    bit_flip_p: 2e-3
+    after:
+      - "OneQubitPauliNoise 1e-3 0 0"
+  "MZ 0":
+    bit_flip_p: 3e-3
+    before:
+      - "OneQubitDepolarisingNoise 3e-3"
+  "MZ 1":
+    bit_flip_p: 4e-3
+    after:
+      - "OneQubitDepolarisingNoise 3e-3"
+decay:
+  0:
+    t1_time: 20
+    t2_time: 10
+  1:
+    t1_time: 30
+    t2_time: 40
+operation_times:
+  "H": 50
+  "H 1": 40
+  "CX 0 1": 60
+  "CX": 70
+  "MZ": 80
+  "MZ 0": 100
+  "RZ": 120

@@ -1,0 +1,43 @@
+# RUN: deltakit_compile deltakit-stim parse %s -O %t.mlir
+# RUN: deltakit_compile compile-passes %t.mlir -t -p add-noise --pass-args '{ \
+# RUN:      "noise_model": "{ \
+# RUN:          name: PhenomenologicalNoiseConfig, \
+# RUN:          phenomenological_noise: { \
+# RUN:              0: \"OneQubitDepolarisingNoise 0.01\", \
+# RUN:              1: \"OneQubitPauliNoise 0.02 0 0\", \
+# RUN:              2: \"LeakageNoise 0.03\", \
+# RUN:              3: \"RelaxNoise 0.04\" \
+# RUN:          } \
+# RUN:      }" \
+# RUN:  }' -O %t.2.mlir
+# RUN: deltakit_compile deltakit-stim print %t.2.mlir -O %t.stim
+# RUN: filecheck %s --input-file %t.stim
+
+I 0 1 2 3
+TICK
+
+# CHECK:      I 0 1 2 3
+# CHECK-NEXT: RELAX(0.04) 3
+# CHECK-NEXT: LEAKAGE(0.03) 2
+# CHECK-NEXT: X_ERROR(0.02) 1
+# CHECK-NEXT: DEPOLARIZE1(0.01) 0
+# CHECK-NEXT: TICK
+
+X 2
+MPP X0*X1
+RZ 3
+TICK
+CX 0 1
+I 2
+MY 3
+TICK
+
+# CHECK-NEXT: X 2
+# CHECK-NEXT: MPP X0*X1
+# CHECK-NEXT: R 3
+# CHECK-NEXT: TICK
+# CHECK-NEXT: CX 0 1
+# CHECK-NEXT: I 2
+# CHECK-NEXT: LEAKAGE(0.03) 2
+# CHECK-NEXT: MY 3
+# CHECK-NEXT: TICK
