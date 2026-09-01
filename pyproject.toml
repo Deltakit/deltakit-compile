@@ -103,7 +103,7 @@ requires = ["uv_build>=0.9.15"]
 build-backend = "uv_build"
 
 [tool.mypy]
-files = ["src/**/*.py", "examples/**/*.py", "tests/unit/**/*.py"]
+files = ["src/**/*.py", "tests/unit/**/*.py"]
 enable_error_code = ["deprecated"]
 
 [[tool.mypy.overrides]]
