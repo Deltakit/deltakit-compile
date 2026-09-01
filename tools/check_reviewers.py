@@ -6,22 +6,36 @@ import json
 import os
 import sys
 from pathlib import Path
-from typing import Final, NamedTuple
+from typing import NamedTuple
 
 import requests
 
-EXPECTED_TOTAL_REVIEWS: Final[int] = 2
-
 
 class ReqReviewerRule(NamedTuple):
-    """A single rule (line) from the REQUIRED_REVIEWERS file."""
+    """
+    A single rule from the ``REQUIRED_REVIEWERS`` file.
+
+    Attributes:
+        pattern: Glob pattern used to match file paths.
+        owners: Usernames of the reviewers required for matching files.
+    """
 
     pattern: str
     owners: list[str]
 
 
 def get_changed_files(repo: str, pr_number: int, token: str) -> list[str]:
-    """Get the filenames of the files that have been changed in the PR."""
+    """
+    Get the filenames of the files changed in a pull request.
+
+    Args:
+        repo: Repository in ``owner/repository`` format.
+        pr_number: Pull request number.
+        token: GitHub API token.
+
+    Returns:
+        The list of changed file paths.
+    """
     files = requests.get(
         f"https://api.github.com/repos/{repo}/pulls/{pr_number}/files",
         headers={"Authorization": f"token {token}"},
@@ -31,7 +45,17 @@ def get_changed_files(repo: str, pr_number: int, token: str) -> list[str]:
 
 
 def get_approved_reviewers(repo: str, pr_number: int, token: str) -> set[str]:
-    """Get the set of usernames of the reviewers that have approved the PR."""
+    """
+    Get the usernames of reviewers who approved the pull request.
+
+    Args:
+        repo: Repository in ``owner/repository`` format.
+        pr_number: Pull request number.
+        token: GitHub API token.
+
+    Returns:
+        The set of usernames of approving reviewers.
+    """
     reviews = requests.get(
         f"https://api.github.com/repos/{repo}/pulls/{pr_number}/reviews",
         headers={"Authorization": f"token {token}"},
@@ -41,7 +65,14 @@ def get_approved_reviewers(repo: str, pr_number: int, token: str) -> set[str]:
 
 
 def parse_required_reviewers_file(path: Path) -> list[ReqReviewerRule]:
-    """Parse the REQUIRED_REVIEWERS file to get a record of every rule in it."""
+    """Parse a ``REQUIRED_REVIEWERS`` file.
+
+    Args:
+        path: Path to the ``REQUIRED_REVIEWERS`` file.
+
+    Returns:
+        The parsed reviewer rules.
+    """
     rules = []
     with path.open("r") as f:
         for line in f:
@@ -60,10 +91,19 @@ def parse_required_reviewers_file(path: Path) -> list[ReqReviewerRule]:
 def determine_required_reviewers(
     rules: list[ReqReviewerRule], filenames: list[str], pr_author: str
 ) -> set[str]:
-    """Determine the set of required reviewers for the provided set of files.
+    """Determine the reviewers required for a pull request.
 
-    The last matched rule for a particular file overrides previous rules. The PR author is
-    excluded."""
+    The last matching rule for each file overrides previous matches. The
+    pull request author is excluded from the required reviewers.
+
+    Args:
+        rules: Parsed reviewer rules.
+        filenames: Files changed in the pull request.
+        pr_author: Username of the pull request author.
+
+    Returns:
+        The set of required reviewers.
+    """
     required = set()
 
     for file in filenames:
@@ -81,7 +121,17 @@ def determine_required_reviewers(
 
 
 def build_reviewer_comment(required: set[str], approved: set[str], is_draft: bool) -> str:
-    """Get the text for the PR comment based on the number of approvals from required reviewers."""
+    """
+    Build the pull request reviewer status comment.
+
+    Args:
+        required: Required reviewers.
+        approved: Reviewers who have approved the pull request.
+        is_draft: Whether the pull request is a draft.
+
+    Returns:
+        The comment body to post on the pull request.
+    """
     required_list = ", ".join(sorted(required))
     approved_list = ", ".join(sorted(approved)) or "_None_"
 
@@ -89,47 +139,34 @@ def build_reviewer_comment(required: set[str], approved: set[str], is_draft: boo
         return (
             "📝 **Draft PR - suggested reviewers**\n\n"
             "At least one of the following must approve this PR once it leaves draft:\n\n"
-            f"{required_list}\n\n"
-            f"Please get {EXPECTED_TOTAL_REVIEWS} approvals in total before merging, if possible."
+            f"{required_list}"
         )
 
-    required_reviewers_satisfied = bool(approved & required)
-    total_reviewers_satisfied = len(approved) >= EXPECTED_TOTAL_REVIEWS
-
-    if required_reviewers_satisfied and total_reviewers_satisfied:
-        return (
-            "✅ **Required reviewers satisfied**\n\n"
-            "✅ **There is no requirement for further approvals**"
-        )
-
-    if required_reviewers_satisfied:
-        return (
-            "✅ **Required reviewers satisfied**\n\n"
-            f"🤔 **Please get {EXPECTED_TOTAL_REVIEWS} approvals in total before merging, "
-            "if possible**"
-        )
-
-    if total_reviewers_satisfied:
-        return (
-            "❌ **Missing required reviewer approval**\n\n"
-            "At least one of the following must approve this PR:\n\n"
-            f"{required_list}\n\nCurrently approved by:\n\n{approved_list}\n\n"
-            "✅ **Total reviewers expectations have been met**"
-        )
+    if bool(approved & required):
+        return """✅ **Reviewer requirement satisfied**"""
 
     return (
         "❌ **Missing required reviewer approval**\n\n"
         "At least one of the following must approve this PR:\n\n"
-        f"{required_list}\n\nCurrently approved by:\n\n{approved_list}\n\n"
-        f"❌ **Please get {EXPECTED_TOTAL_REVIEWS} approvals in total before merging, if possible**"
+        f"{required_list}\n\nCurrently approved by:\n\n{approved_list}"
     )
 
 
 def post_or_update_comment(
     repo: str, pr_number: str, token: str, comment_marker: str, comment_body: str
 ) -> None:
-    """Post a new comment on the repo or update the existing one, determining whether the comment is
-    already present by searching for a comment with the provided marker."""
+    """Post a pull request comment or update an existing one.
+
+    A comment is considered to already exist if it contains the supplied
+    marker.
+
+    Args:
+        repo: Repository in ``owner/repository`` format.
+        pr_number: Pull request number.
+        token: GitHub API token.
+        comment_marker: Marker used to identify the managed comment.
+        comment_body: Comment body to post.
+    """
     headers = {"Authorization": f"token {token}"}
 
     # Find existing bot comment
