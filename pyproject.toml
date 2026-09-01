@@ -62,9 +62,6 @@ test = [
 typing = ["types-PyYAML >=5.4.2, <6"]
 lint = [
   { include-group = "typing" },
-  # Specify lower bound for click that fixes a vulnerability caught by
-  # pip-audit.
-  "click>=8.3.3, <9.0",
   "mypy>=2.2.0,<3",
   "types-networkx >=3.1, <4",
   "ruff==0.15.19",
@@ -76,6 +73,7 @@ licences = ["pip-licenses >=3.5.3, <6"]
 security = [
   "bandit[toml] >=1.7.5, <2",
   "pip-audit>=2.8.0, <3",
+  "ochrona >=2.0.2, <3",
 ]
 release = [
   "python-semantic-release >=10.6.1, <11",
