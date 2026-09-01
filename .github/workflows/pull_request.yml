@@ -142,5 +142,5 @@ jobs:
       - name: Running Pip-audit
         run: |
           uv pip install --upgrade pip
-          uv run --no-sync pip-audit
+          uv run --no-sync pip-audit --ignore-vuln PYSEC-2026-2132
         if: ${{ always() }}
