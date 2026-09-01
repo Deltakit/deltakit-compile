@@ -75,7 +75,12 @@ security = [
   "pip-audit>=2.8.0, <3",
   "ochrona >=2.0.2, <3",
 ]
-
+release = [
+  "python-semantic-release >=10.6.1, <11",
+  "packaging >=25.0, <27",
+  "requests>=2.32.0",
+  "tomlkit<0.16,>=0.13",
+]
 dev = [
   { include-group = "test" },
   { include-group = "lint" },
