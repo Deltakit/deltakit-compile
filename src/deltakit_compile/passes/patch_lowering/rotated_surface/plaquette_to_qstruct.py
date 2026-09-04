@@ -1,5 +1,4 @@
 # (c) Copyright Riverlane 2025-2026. All rights reserved.
-
 """Implement the ``plaquette-to-qstruct`` pass that lowers ``plaquette.sub_circuit`` and
 ``plaquette.round`` operations to ``qstruct.parallel`` operations."""
 

@@ -1,5 +1,4 @@
 # (c) Copyright Riverlane 2025-2026. All rights reserved.
-
 """Lowering ``sobs`` operations to ``qec`` operations."""
 
 import itertools

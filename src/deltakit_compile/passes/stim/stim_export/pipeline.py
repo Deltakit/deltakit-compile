@@ -1,5 +1,4 @@
 # (c) Copyright Riverlane 2025-2026. All rights reserved.
-
 """Pass that runs the whole stim export flow pipeline."""
 
 from typing_extensions import override
