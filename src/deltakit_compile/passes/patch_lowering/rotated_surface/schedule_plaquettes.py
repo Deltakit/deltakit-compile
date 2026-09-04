@@ -1,7 +1,4 @@
-# This file contains information which is proprietary to Riverlane Limited
-# ("Riverlane") and is Riverlane Confidential Information.
 # (c) Copyright Riverlane 2025-2026. All rights reserved.
-
 """Set the ``stabs_measurement`` attribute on supported ``plaquette.plaquette`` operations.
 
 Note that at the moment this pass relies on ``patch-to-plaquette`` to enforce some invariants:

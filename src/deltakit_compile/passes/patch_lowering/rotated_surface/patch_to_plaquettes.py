@@ -1,5 +1,3 @@
-# This file contains information which is proprietary to Riverlane Limited
-# ("Riverlane") and is Riverlane Confidential Information.
 # (c) Copyright Riverlane 2025-2026. All rights reserved.
 """Lower ``log_asm`` rotated surface code patches to ``plaquette.plaquette``.
 

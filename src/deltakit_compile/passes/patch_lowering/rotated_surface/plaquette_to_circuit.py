@@ -1,7 +1,4 @@
-# This file contains information which is proprietary to Riverlane Limited
-# ("Riverlane") and is Riverlane Confidential Information.
 # (c) Copyright Riverlane 2025-2026. All rights reserved.
-
 """Implement the ``plaquette-to-circuit`` pass that lowers ``plaquette.plaquette`` operations to
 ``plaquette.sub_circuit`` operations."""
 
