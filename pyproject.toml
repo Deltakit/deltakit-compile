@@ -53,7 +53,7 @@ test = [
   "pytest-json-report >=1.5.0, <2",
   "filecheck >=1.0.3, <2",
   "filecheckize >=0.2, <0.3",
-  "lit >=18.1.8, <19",
+  "lit>=18.1.8,<24",
   "nbclient>=0.10.2,<0.12",
   "coverage >=7.7.0, <8",
   "packaging >=25.0, <27",
@@ -64,10 +64,10 @@ lint = [
   { include-group = "typing" },
   "mypy>=2.2.0,<3",
   "types-networkx >=3.1, <4",
-  "ruff==0.15.19",
+  "ruff==0.16.5",
   "typos >=1.34, <2",
   "deptry>=0.23,<0.26",
-  "pydoclint >=0.8.6, <0.9",
+  "pydoclint>=0.8.6,<0.10",
 ]
 licences = ["pip-licenses >=3.5.3, <6"]
 security = [
@@ -86,7 +86,7 @@ dev = [
   { include-group = "lint" },
   { include-group = "security" },
   "pre-commit >=4.2, <5",
-  "validate-pyproject >=0.24.1, <0.26.0",
+  "validate-pyproject>=0.24.1,<0.27.0",
 ]
 
 [project.scripts]
