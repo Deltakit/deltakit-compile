@@ -58,7 +58,12 @@ from deltakit_compile.dialects.common.attributes import (
     parse_float64,
 )
 from deltakit_compile.dialects.common.constraints import BaseVarConstraint
-from deltakit_compile.dialects.qcore import NoQuantumEffect, PauliAttr, QubitRegType
+from deltakit_compile.dialects.qcore import (
+    NoQuantumEffect,
+    PatchQuantumEffect,
+    PauliAttr,
+    QubitRegType,
+)
 from deltakit_compile.shared.patch.bounding_box import BoundingBox
 from deltakit_compile.utilities.base_enums import BetterStrEnum
 
@@ -600,6 +605,8 @@ class PatchDeclarationOp(BaseLogicalAssemblyOp, IRDLOperation):
 
     res = result_def(BasePatch.constr())
 
+    traits = traits_def(Pure(), NoQuantumEffect())
+
     assembly_format = " attr-dict `->` type($res)"
 
     def __init__(self, patch_type: BasePatch):
@@ -636,6 +643,8 @@ class RotateOp(BaseMovementOp, IRDLOperation):
     bridge_patches = var_operand_def(RangeOf(_PT))
     rounds = prop_def(IntAttr.constr(AtLeast(0)))
     res = result_def(_PT & _LP)
+
+    traits = traits_def(PatchQuantumEffect("patch"))
 
     assembly_format = (
         f"`<` {PlainIntAttr.use('$rounds')} `>` `(` $patch `:` type($patch) `)` "
@@ -699,6 +708,8 @@ class MoveOp(BaseMovementOp):
     rounds = prop_def(IntAttr.constr(AtLeast(0)))
     res = result_def(_PT & _LP)
 
+    traits = traits_def(PatchQuantumEffect("patch"))
+
     assembly_format = (
         f"`<` {PlainIntAttr.use('$rounds')} `>` `(` $patch `:` type($patch) `)` "
         "`(` $bridge_patches `:` type($bridge_patches) `)` attr-dict `->` type($res)"
@@ -745,6 +756,8 @@ class GrowOp(BaseMovementOp):
     rounds = prop_def(IntAttr.constr(AtLeast(0)))
     res = result_def(_PT)
 
+    traits = traits_def(PatchQuantumEffect("patch"))
+
     assembly_format = (
         f"`<` {PlainIntAttr.use('$rounds')} `>` `(` $patch `:` type($patch) `)` "
         "attr-dict `->` type($res)"
@@ -778,6 +791,8 @@ class ShrinkOp(BaseMovementOp):
     patch = operand_def(_PT)
     rounds = prop_def(IntAttr.constr(AtLeast(0)))
     res = result_def(_PT)
+
+    traits = traits_def(PatchQuantumEffect("patch"))
 
     assembly_format = (
         f"`<` {PlainIntAttr.use('$rounds')} `>` `(` $patch `:` type($patch) `)` "
@@ -814,6 +829,8 @@ class StepOp(BaseMovementOp):
     patch = operand_def(_PT)
     res = result_def(_PT)
 
+    traits = traits_def(PatchQuantumEffect("patch"))
+
     assembly_format = "`(` $patch `:` type($patch) `)` attr-dict `->` type($res)"
 
     def __init__(self, patch: SSAValue, new_type: SurfaceCodeBasePatch):
@@ -841,6 +858,8 @@ class PrepareOp(BaseLogicalAssemblyOp, IRDLOperation):
     basis = prop_def(PauliAttr)
     res = result_def(_PT)
 
+    traits = traits_def(PatchQuantumEffect("patch"))
+
     assembly_format = (
         f"`<` {PauliAttr.plain_directive('$basis')} `>` `(` $patch `:` type($patch) `)` attr-dict"
     )
@@ -865,6 +884,8 @@ class MeasureOp(BaseLogicalAssemblyOp, IRDLOperation):
     patch = operand_def(_PT)
     basis = prop_def(PauliAttr)
     measurement = result_def(i1)
+
+    traits = traits_def(PatchQuantumEffect("patch"))
 
     assembly_format = (
         f"`<` {PauliAttr.plain_directive('$basis')} `>`"
@@ -896,6 +917,8 @@ class MeasStabOp(BaseLogicalAssemblyOp, IRDLOperation):
     patch = operand_def(_PT)
     min_rounds = prop_def(IntAttr.constr(AtLeast(0)))
     res = result_def(_PT)
+
+    traits = traits_def(PatchQuantumEffect("patch"))
 
     assembly_format = (
         f"`<` {PlainIntAttr.use('$min_rounds')} `>` `(` $patch `:` type($patch) `)` attr-dict"
@@ -938,6 +961,8 @@ class MultiPauliMeasOp(BaseLogicalAssemblyOp, IRDLOperation):
 
     measurement = result_def(i1)
     res = var_result_def(_LP)
+
+    traits = traits_def(PatchQuantumEffect("logical_patches"))
 
     assembly_format = (
         f"`<` {PlainIntAttr.use('$rounds')} `,` "
@@ -1008,6 +1033,8 @@ class TransversalGateOp(BaseLogicalAssemblyOp, IRDLOperation):
     patches = var_operand_def(_LP)
     gate_type = prop_def(GateTypeAttr)  # TODO use qcore gates
     res = var_result_def(_LP)
+
+    traits = traits_def(PatchQuantumEffect("patches"))
 
     assembly_format = (
         f"`<` {GateTypeAttr.plain_directive('$gate_type')} `>` "
