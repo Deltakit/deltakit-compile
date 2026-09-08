@@ -1,5 +1,3 @@
-# This file contains information which is proprietary to Riverlane Limited
-# ("Riverlane") and is Riverlane Confidential Information.
 # (c) Copyright Riverlane 2025-2026. All rights reserved.
 """Utilities for listing all the stabilisers that need to be measured for specific operations."""
 

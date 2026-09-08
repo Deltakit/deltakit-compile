@@ -1,6 +1,3 @@
-# This file contains information which is proprietary to Riverlane Limited
-# ("Riverlane") and is Riverlane Confidential Information.
-
 # (c) Copyright Riverlane 202. All rights reserved.
 """Tests for the stim_tag_to_attributes pass."""
 
