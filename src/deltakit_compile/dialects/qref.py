@@ -78,6 +78,17 @@ class GateLikeOp(IRDLOperation, ABC):
         return self.qubit_operand_groups[0]
 
 
+class _ResetOpHasCanonicalizationPatternsTrait(HasCanonicalizationPatternsTrait):
+    @override
+    @classmethod
+    def get_canonicalization_patterns(cls) -> tuple[RewritePattern, ...]:
+        from deltakit_compile.passes.canonicalisation.qref import (  # noqa: PLC0415
+            DeadGateBeforeReset,
+        )  # Imported here to avoid circular imports.
+
+        return (DeadGateBeforeReset(),)
+
+
 @irdl_op_definition
 class ResetOp(GateLikeOp):
     """An operation for resetting the state of a qubit by reference.
@@ -111,6 +122,7 @@ class ResetOp(GateLikeOp):
     traits = traits_def(
         qcore.QubitResetEffect("qubits"),
         qcore.HasCircuitAncestor(),
+        _ResetOpHasCanonicalizationPatternsTrait(),
     )
 
     def __init__(self, basis: qcore.Pauli, qubits: Sequence[SSAValue]):
