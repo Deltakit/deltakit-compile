@@ -2,7 +2,6 @@
 """Module defining the public API methods for working with Deltakit-Stim circuits in
 deltakit-compile."""
 
-from deltakit_stim import Circuit
 from xdsl.context import Context
 from xdsl.dialects.arith import Arith
 from xdsl.dialects.builtin import Builtin, ModuleOp
@@ -15,6 +14,7 @@ from deltakit_compile.dialects.qref import QRef
 from deltakit_compile.dialects.qstruct import QStruct
 from deltakit_compile.dialects.stim import Stim, to_stim
 from deltakit_compile.frontend.deltakit_stim._translator import DeltakitStimTranslator
+from deltakit_compile.interop.deltakit_stim import Circuit
 from deltakit_compile.passes.stim.stim_export.pipeline import (
     StimExportPipeline,
     StimExportPipelineConfig,

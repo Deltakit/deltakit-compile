@@ -3,7 +3,6 @@
 from collections.abc import Sequence
 from io import StringIO
 
-from deltakit_stim import Circuit
 from xdsl.context import Context
 from xdsl.dialects.builtin import ModuleOp
 from xdsl.ir import IRNode, Operation, SSAValue
@@ -12,6 +11,7 @@ from xdsl.printer import Printer
 
 from deltakit_compile.dialects.stim import to_stim
 from deltakit_compile.frontend.deltakit_stim import deltakit_stim_circuit_to_dialect
+from deltakit_compile.interop.deltakit_stim import Circuit
 
 
 def check_asm_roundtrip(program: str, ctx: Context):

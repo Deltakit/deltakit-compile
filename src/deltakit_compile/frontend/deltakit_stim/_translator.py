@@ -6,7 +6,6 @@ from __future__ import annotations
 from collections import defaultdict
 from typing import NamedTuple
 
-from deltakit_stim import Circuit, CircuitInstruction, CircuitRepeatBlock, GateTarget
 from xdsl.builder import Builder
 from xdsl.dialects.builtin import ModuleOp, StringAttr
 from xdsl.ir import Block, SSAValue
@@ -37,6 +36,12 @@ from deltakit_compile.dialects.stim import (
     YieldOp,
 )
 from deltakit_compile.exceptions import InvalidInputStimCircuit
+from deltakit_compile.interop.deltakit_stim import (
+    Circuit,
+    CircuitInstruction,
+    CircuitRepeatBlock,
+    GateTarget,
+)
 from deltakit_compile.shared.deltakit_stim.gates import (
     AnnotationEnum,
     LeakageEnum,
