@@ -63,7 +63,7 @@ jobs:
       - name: Setup venv
         run: |
           uv sync --python ${{ matrix.python-version }} --resolution ${{matrix.dependency-resolution}} \
-            --group test --group examples
+            --group test
           uv pip install dist/*.whl
 
       - name: Run pytest
