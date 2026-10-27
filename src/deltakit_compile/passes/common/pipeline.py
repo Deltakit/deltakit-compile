@@ -512,7 +512,7 @@ def configurable_pass(cls: ConfiguredPassInvT) -> ConfiguredPassInvT:
                     f"typed but '{current_field_name}' in '{current_config_type.__name__}' is not"
                 )
                 raise InvalidConfigurablePassDefinitionException(msg)
-            current_config_type = next_type
+            current_config_type = cast(type, next_type)
         data_class_field_type = data_class_field_types[dataclass_field.name]
         if not _is_subtype(current_config_type, data_class_field_type):
             msg = (
