@@ -192,7 +192,7 @@ class TestQcoreGateToNCStimOp:
     ) -> None:
         """Tests that a multi-qubit UnitaryGateAttr has no ncstim equivalent, arbitrary
         multi-qubit unitary synthesis is not covered in this mapping function, and raises by
-        default, matching qcore_gate_to_lestim_enum's convention."""
+        default, matching qcore_gate_to_deltakit_stim_enum's convention."""
         targets = [qubit_allocs[0].results[0], qubit_allocs[1].results[0]]
         gate = UnitaryGateAttr.from_ndarray(CXGateAttr().get_unitary_matrix())
         with pytest.raises(
