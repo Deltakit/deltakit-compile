@@ -154,7 +154,7 @@ class TestQcoreGateToNCStimOp:
         """Tests that RotationGateAttr maps to RotationGateOp via a plain field copy, the choice
         of the most specific instruction name (R_X, SPP, TPP, ...) is entirely
         RotationGateOp's."""
-        targets = [qubit_allocs[0].results[0]] * gate.get_qubit_count()
+        targets = [qubit_allocs[0].res] * gate.get_qubit_count()
         op = qcore_gate_to_ncstim_op(gate, targets)
         assert isinstance(op, RotationGateOp)
         assert list(op.pauli_modifiers) == exp_pauli_modifiers
@@ -174,7 +174,7 @@ class TestQcoreGateToNCStimOp:
     ) -> None:
         """Tests that a single-qubit UnitaryGateAttr maps to a U3GateOp whose angles reconstruct
         the original matrix."""
-        qubit = qubit_allocs[0].results[0]
+        qubit = qubit_allocs[0].res
         gate = UnitaryGateAttr.from_ndarray(matrix)
         op = qcore_gate_to_ncstim_op(gate, [qubit])
         assert isinstance(op, U3GateOp)
@@ -193,7 +193,7 @@ class TestQcoreGateToNCStimOp:
         """Tests that a multi-qubit UnitaryGateAttr has no ncstim equivalent, arbitrary
         multi-qubit unitary synthesis is not covered in this mapping function, and raises by
         default, matching qcore_gate_to_deltakit_stim_enum's convention."""
-        targets = [qubit_allocs[0].results[0], qubit_allocs[1].results[0]]
+        targets = [qubit_allocs[0].res, qubit_allocs[1].res]
         gate = UnitaryGateAttr.from_ndarray(CXGateAttr().get_unitary_matrix())
         with pytest.raises(
             StimUnsupportedGate,
@@ -207,7 +207,7 @@ class TestQcoreGateToNCStimOp:
     ) -> None:
         """Tests that a multi-qubit UnitaryGateAttr returns None instead of raising when
         raise_on_unsupported is False."""
-        targets = [qubit_allocs[0].results[0], qubit_allocs[1].results[0]]
+        targets = [qubit_allocs[0].res, qubit_allocs[1].res]
         gate = UnitaryGateAttr.from_ndarray(CXGateAttr().get_unitary_matrix())
         assert qcore_gate_to_ncstim_op(gate, targets, raise_on_unsupported=False) is None
 
@@ -233,7 +233,7 @@ class TestQcoreGateToNCStimOp:
         ...) maps to stim.CliffordGateOp, tried before any ncstim-specific form - an X gate
         should always come out as a plain stim X, never as an ncstim rotation, even though the
         latter is also a valid representation."""
-        targets = [qubit_allocs[i].results[0] for i in target_indices]
+        targets = [qubit_allocs[i].res for i in target_indices]
         op = qcore_gate_to_ncstim_op(gate, targets)
         assert isinstance(op, stim.CliffordGateOp)
         assert op.gate_type.data == exp_gate_type
@@ -258,7 +258,7 @@ class TestQcoreGateToNCStimOp:
     ) -> None:
         """Tests that named gates with a dedicated ncstim opcode and no stim equivalent (T,
         T_DAG, CCX, CCZ, CH) map to NonCliffordGateOp."""
-        targets = [qubit_allocs[i].results[0] for i in target_indices]
+        targets = [qubit_allocs[i].res for i in target_indices]
         op = qcore_gate_to_ncstim_op(gate, targets)
         assert isinstance(op, NonCliffordGateOp)
         assert op.gate_type.data == exp_gate_type
