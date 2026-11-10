@@ -108,6 +108,24 @@ builtin.module {
 // CHECK-NEXT:          }
 // CHECK-NEXT:          qref.gate<#qcore.gate.h> (%r)
 
+// Not rotated: the X before the reset acts on %r, while the reset and the H act
+// on %qj. Inside this loop the two name the same threaded qubit, so the X sits
+// between the rotated H and the reset, and remove-dead-gates would stop there.
+        %r2 = qstruct.repeat<3> (%r : !qcore.qubit) -> !qcore.qubit {
+        ^bb2(%qj : !qcore.qubit):
+            qref.gate<#qcore.gate.x> (%r)
+            qref.reset<Z> (%qj)
+            qref.gate<#qcore.gate.h> (%qj)
+            qstruct.yield %qj : !qcore.qubit
+        }
+// CHECK-NEXT:          %r2 = qstruct.repeat<3> (%r : !qcore.qubit) -> !qcore.qubit {
+// CHECK-NEXT:          ^bb2(%qj: !qcore.qubit):
+// CHECK-NEXT:              qref.gate<#qcore.gate.x> (%r)
+// CHECK-NEXT:              qref.reset<Z> (%qj)
+// CHECK-NEXT:              qref.gate<#qcore.gate.h> (%qj)
+// CHECK-NEXT:              qstruct.yield %qj : !qcore.qubit
+// CHECK-NEXT:          }
+
         qstruct.yield %q : !qcore.qubit
     }
 // CHECK-NEXT:          qstruct.yield %q : !qcore.qubit

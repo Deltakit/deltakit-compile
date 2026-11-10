@@ -43,10 +43,11 @@ def _reset_follows_rotation(block: Block, trailing: GateOp) -> bool:
     """Whether the gate, once rotated to the start of the body, sits directly before a reset.
 
     The rotation only pays off when the copy at the start of the body can then be removed.
-    Otherwise it turns N gates into N + 2. This is the same condition `remove-dead-gates` uses:
-    the first operation in the body touching any qubit of the gate must be a single reset covering
-    all of them. Operations carrying a region or a qubit register stop the search, since what they
-    touch is not visible in their operands.
+    Otherwise it turns N gates into N + 2. The check mirrors `remove-dead-gates`, conservatively:
+    the first operation in the body touching any qubit at all must be a single reset covering every
+    qubit of the gate. An operation on a different qubit value ends the search too, since two
+    values can name the same qubit. Operations carrying a region or a qubit register stop it as
+    well, since what they touch is not visible in their operands.
     """
     targets = set(trailing.qubits)
     for current in block.ops:
@@ -57,7 +58,7 @@ def _reset_follows_rotation(block: Block, trailing: GateOp) -> bool:
         touched = {
             operand for operand in current.operands if isinstance(operand.type, qcore.QubitType)
         }
-        if touched & targets:
+        if touched:
             return isinstance(current, ResetOp) and targets <= touched
     return False
 
