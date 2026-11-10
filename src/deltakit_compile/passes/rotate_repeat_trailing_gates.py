@@ -4,7 +4,7 @@
 from typing_extensions import override
 from xdsl.context import Context
 from xdsl.dialects.builtin import ModuleOp
-from xdsl.ir import BlockArgument, SSAValue
+from xdsl.ir import Block, BlockArgument, SSAValue
 from xdsl.passes import ModulePass
 from xdsl.pattern_rewriter import (
     PatternRewriter,
@@ -16,27 +16,50 @@ from xdsl.rewriter import InsertPoint
 
 from deltakit_compile.dialects import qcore
 from deltakit_compile.dialects import stabiliser as stab
-from deltakit_compile.dialects.qref import GateOp
+from deltakit_compile.dialects.qref import GateOp, ResetOp
 from deltakit_compile.dialects.qstruct import RepeatOp
 
-_SELF_INVERSE = (
-    qcore.IdentityGateAttr,
-    qcore.XGateAttr,
-    qcore.YGateAttr,
-    qcore.ZGateAttr,
-    qcore.HGateAttr,
+_SELF_INVERSING_GATES = (
+    qcore.IdentityGateAttr(),
+    qcore.XGateAttr(),
+    qcore.YGateAttr(),
+    qcore.ZGateAttr(),
+    qcore.HGateAttr(),
 )
 """Gates that are their own inverse, so that applying one twice is the identity.
 
 Deliberately a list of named gates rather than a property of the attribute: the rotation below is
-only sound for gates where G G = I, and getting that wrong changes the circuit silently. A gate
-carrying options is excluded even when its base is on this list, since the options may change the
-matrix.
+only sound for gates where G G = I, and getting that wrong changes the circuit silently. Comparing
+by equality also excludes a gate carrying options, such as a square root X, since those are not
+equal to the plain gate.
 """
 
 
 def _is_self_inverse(gate: qcore.GateAttribute) -> bool:
-    return isinstance(gate, _SELF_INVERSE) and not gate.options.data
+    return gate in _SELF_INVERSING_GATES
+
+
+def _reset_follows_rotation(block: Block, trailing: GateOp) -> bool:
+    """Whether the gate, once rotated to the start of the body, sits directly before a reset.
+
+    The rotation only pays off when the copy at the start of the body can then be removed.
+    Otherwise it turns N gates into N + 2. This is the same condition `remove-dead-gates` uses:
+    the first operation in the body touching any qubit of the gate must be a single reset covering
+    all of them. Operations carrying a region or a qubit register stop the search, since what they
+    touch is not visible in their operands.
+    """
+    targets = set(trailing.qubits)
+    for current in block.ops:
+        if current is trailing or current.regions:
+            return False
+        if any(isinstance(operand.type, qcore.QubitRegType) for operand in current.operands):
+            return False
+        touched = {
+            operand for operand in current.operands if isinstance(operand.type, qcore.QubitType)
+        }
+        if touched & targets:
+            return isinstance(current, ResetOp) and targets <= touched
+    return False
 
 
 class _RotateTrailingGatePattern(RewritePattern):
@@ -59,6 +82,9 @@ class _RotateTrailingGatePattern(RewritePattern):
     The two copies left outside the loop are dead in the same sense but are not removed here, since
     that needs a pattern that looks across the loop boundary.
 
+    The rotation is only applied when the gate would land directly before such a reset. Without
+    that, the body keeps its N copies and the loop gains two more.
+
     When the gate acts on a qubit the loop carries as a block argument, the copies use the matching
     iter arg and result instead, which name the same qubit outside the body. A gate acting on a
     value produced inside the body cannot be lifted out and is left where it is.
@@ -76,6 +102,8 @@ class _RotateTrailingGatePattern(RewritePattern):
             return
         if not all(len(group) == 1 for group in trailing.qubit_operand_groups):
             return
+        if not _reset_follows_rotation(block, trailing):
+            return
 
         # The copies go before and after the loop, where the body's own block arguments do not
         # exist. A block argument stands for a qubit threaded through the loop, so at that index the
@@ -85,14 +113,13 @@ class _RotateTrailingGatePattern(RewritePattern):
         #
         # A value produced inside the body, on the other hand, exists nowhere outside it, so a gate
         # touching one cannot be lifted out at all.
-        defined_inside = set(op.body.walk())
         before_qubits: list[SSAValue] = []
         after_qubits: list[SSAValue] = []
         for operand in trailing.qubits:
             if isinstance(operand, BlockArgument) and operand.owner is block:
                 before_qubits.append(op.iter_args[operand.index])
                 after_qubits.append(op.res[operand.index])
-            elif operand.owner in defined_inside:
+            elif op.is_ancestor(operand.owner):
                 return
             else:
                 before_qubits.append(operand)

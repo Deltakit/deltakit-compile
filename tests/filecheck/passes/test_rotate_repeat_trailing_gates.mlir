@@ -49,6 +49,47 @@ builtin.module {
 // CHECK-NEXT:              qstruct.yield
 // CHECK-NEXT:          }
 
+// Not rotated: the H is self-inverse, but nothing resets the qubit at the start
+// of the body, so the copy rotated there could not be removed and the loop would
+// just gain two gates. Here the measurement is the first thing to touch it.
+        qstruct.repeat<3> () -> {
+            %m2 = qref.measure<Z>(%q) -> i1
+            qref.reset<Z> (%q)
+            qref.gate<#qcore.gate.h> (%q)
+            qstruct.yield
+        }
+// CHECK-NEXT:          qstruct.repeat<3> () -> {
+// CHECK-NEXT:              %m2 = qref.measure<Z> (%q) -> i1
+// CHECK-NEXT:              qref.reset<Z> (%q)
+// CHECK-NEXT:              qref.gate<#qcore.gate.h> (%q)
+// CHECK-NEXT:              qstruct.yield
+// CHECK-NEXT:          }
+
+// Not rotated: no reset in the body at all.
+        qstruct.repeat<3> () -> {
+            %m3 = qref.measure<Z>(%q) -> i1
+            qref.gate<#qcore.gate.h> (%q)
+            qstruct.yield
+        }
+// CHECK-NEXT:          qstruct.repeat<3> () -> {
+// CHECK-NEXT:              %m3 = qref.measure<Z> (%q) -> i1
+// CHECK-NEXT:              qref.gate<#qcore.gate.h> (%q)
+// CHECK-NEXT:              qstruct.yield
+// CHECK-NEXT:          }
+
+// Not rotated: a square root X is not its own inverse. It is the plain X with
+// an option, and the comparison by equality must not mistake one for the other.
+        qstruct.repeat<3> () -> {
+            qref.reset<Z> (%q)
+            qref.gate<#qcore.gate.x<sqrt>> (%q)
+            qstruct.yield
+        }
+// CHECK-NEXT:          qstruct.repeat<3> () -> {
+// CHECK-NEXT:              qref.reset<Z> (%q)
+// CHECK-NEXT:              qref.gate<#qcore.gate.x<sqrt>> (%q)
+// CHECK-NEXT:              qstruct.yield
+// CHECK-NEXT:          }
+
 // Rotated across the loop boundary: the gate acts on %qi, a block argument, so
 // the copy before the loop uses the iter arg %q feeding it and the copy after
 // uses the result %r leaving it. All three name the same threaded qubit.
