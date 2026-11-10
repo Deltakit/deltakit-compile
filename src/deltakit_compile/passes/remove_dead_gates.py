@@ -24,7 +24,9 @@ class _DeadGateBeforeResetPattern(RewritePattern):
     reset before anything else touches it, which is the common case in a syndrome extraction round.
 
     Only gates whose qubits are *all* being reset are removed, and only when nothing between the
-    gate and the reset uses those qubits. That subset test is what makes the arity irrelevant: a
+    gate and the reset uses those qubits, or any other qubit: since two values can refer to the
+    same qubit, an operation on a different value is not known to leave the reset qubits alone.
+    That subset test is what makes the arity irrelevant: a
     gate acts on nothing beyond its own operands, so a two-qubit gate with both operands reset and
     untouched in between is as dead as a basis change. Detectors and observables refer to
     measurement records rather than qubits, so they do not count as a use and do not block the
@@ -58,7 +60,14 @@ class _DeadGateBeforeResetPattern(RewritePattern):
                 if isinstance(operand.type, qcore.QubitType)
             }
 
-            if isinstance(previous, GateOp) and touched and touched <= clean:
+            # Two SSA values can name the same qubit: unpacking one register twice gives two sets
+            # of values for the same qubits. An operation touching any qubit value outside `clean`
+            # may therefore be touching a qubit in it under another name, so the walk stops there
+            # rather than assume the names are distinct.
+            if not touched <= clean:
+                return
+
+            if isinstance(previous, GateOp) and touched:
                 rewriter.erase_op(previous)
                 return
 

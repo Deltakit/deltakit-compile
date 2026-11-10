@@ -61,11 +61,49 @@ builtin.module {
 // CHECK-NEXT:          }
 // CHECK-NEXT:          qref.reset<Z> (%q1)
 
+// Not removed: the X between the gate and the reset acts on %q2, a different
+// value. Two values can name the same qubit (see the register case below), so
+// the walk cannot assume %q2 leaves %q1 alone, and stops.
+        qref.gate<#qcore.gate.h> (%q1)
+        qref.gate<#qcore.gate.x> (%q2)
+        qref.reset<Z> (%q1)
+// CHECK-NEXT:          qref.gate<#qcore.gate.h> (%q1)
+// CHECK-NEXT:          qref.gate<#qcore.gate.x> (%q2)
+// CHECK-NEXT:          qref.reset<Z> (%q1)
+
         qstruct.yield %q1, %q2 : !qcore.qubit, !qcore.qubit
     }
 // CHECK-NEXT:          qstruct.yield %q1, %q2 : !qcore.qubit, !qcore.qubit
 // CHECK-NEXT:      }
     "test.op"(%oq1, %oq2) : (!qcore.qubit, !qcore.qubit) -> ()
 // CHECK-NEXT:      "test.op"(%oq1, %oq2) : (!qcore.qubit, !qcore.qubit) -> ()
+
+// Not removed: unpacking the same register twice gives %qa and %qb, two names
+// for the same two qubits. The measurements read the state the X produced,
+// under the other name. Removing the X would change what they read.
+    %reg = qcore.alloc_qubit -> !qcore.qubit_reg<2>
+    %oreg = qstruct.circuit(%reg : !qcore.qubit_reg<2>) -> !qcore.qubit_reg<2> {
+    ^bb1(%qreg: !qcore.qubit_reg<2>):
+        %qa1, %qa2 = qcore.unpack_qubit_reg(%qreg : !qcore.qubit_reg<2>)
+        %qb1, %qb2 = qcore.unpack_qubit_reg(%qreg : !qcore.qubit_reg<2>)
+        qref.gate<#qcore.gate.x> (%qa1, %qa2)
+        %mb1 = qref.measure<X>(%qb1) -> i1
+        %mb2 = qref.measure<X>(%qb2) -> i1
+        qref.reset<X> (%qa1, %qa2)
+        qstruct.yield %qreg : !qcore.qubit_reg<2>
+    }
+// CHECK-NEXT:      %reg = qcore.alloc_qubit -> !qcore.qubit_reg<2>
+// CHECK-NEXT:      %oreg = qstruct.circuit(%reg : !qcore.qubit_reg<2>) -> !qcore.qubit_reg<2> {
+// CHECK-NEXT:      ^bb0(%qreg: !qcore.qubit_reg<2>):
+// CHECK-NEXT:          %qa1, %qa2 = qcore.unpack_qubit_reg(%qreg : !qcore.qubit_reg<2>)
+// CHECK-NEXT:          %qb1, %qb2 = qcore.unpack_qubit_reg(%qreg : !qcore.qubit_reg<2>)
+// CHECK-NEXT:          qref.gate<#qcore.gate.x> (%qa1, %qa2)
+// CHECK-NEXT:          %mb1 = qref.measure<X> (%qb1) -> i1
+// CHECK-NEXT:          %mb2 = qref.measure<X> (%qb2) -> i1
+// CHECK-NEXT:          qref.reset<X> (%qa1, %qa2)
+// CHECK-NEXT:          qstruct.yield %qreg : !qcore.qubit_reg<2>
+// CHECK-NEXT:      }
+    "test.op"(%oreg) : (!qcore.qubit_reg<2>) -> ()
+// CHECK-NEXT:      "test.op"(%oreg) : (!qcore.qubit_reg<2>) -> ()
 }
 // CHECK-NEXT:  }
