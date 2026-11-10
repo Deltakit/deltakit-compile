@@ -69,7 +69,7 @@ class _DeadGateBeforeResetPattern(RewritePattern):
 class RemoveDeadGates(ModulePass):
     """Remove gates whose effect no later operation in the circuit can observe.
 
-    Currently one pattern: a gate immediately before a reset of every qubit it touches. The
+    Currently one pattern: gates immediately before a reset of every qubit it touches. The
     intent is that further cases, such as gates on qubits that are never measured, become patterns
     in this pass rather than separate ones.
 
@@ -79,7 +79,7 @@ class RemoveDeadGates(ModulePass):
     caller opts into.
 
     For the same reason it must run before noise is added: a noise channel attached to a gate that
-    is later removed describes a gate that no longer exists. See Deltakit/deltakit#286.
+    is later removed describes a gate that no longer exists.
     """
 
     name = "remove-dead-gates"
@@ -89,7 +89,6 @@ class RemoveDeadGates(ModulePass):
         # Recursive because erasing a gate can expose the one behind it: a body ending in two dead
         # basis changes needs a second look at the same reset. Each application erases an op, so
         # the walk terminates.
-        PatternRewriteWalker(
-            _DeadGateBeforeResetPattern(),
-            apply_recursively=True,
-        ).rewrite_module(op)
+        PatternRewriteWalker(_DeadGateBeforeResetPattern(), apply_recursively=True).rewrite_module(
+            op
+        )
