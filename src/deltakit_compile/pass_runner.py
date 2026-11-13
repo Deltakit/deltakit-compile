@@ -85,6 +85,7 @@ from deltakit_compile.passes.patch_lowering.rotated_surface.transversal_op_to_ci
 from deltakit_compile.passes.qstruct_circuit_to_stab import QStructCircuitToStabPass
 from deltakit_compile.passes.realign_qec_detectors import RealignQecDetectors
 from deltakit_compile.passes.remap_qubits import RemapQubits
+from deltakit_compile.passes.remove_dead_gates import RemoveDeadGates
 from deltakit_compile.passes.serialise_circuit import SerialiseCircuit
 from deltakit_compile.passes.sobs_to_qec import SobsObservableToQec
 from deltakit_compile.passes.split_gate_like_broadcast_ops import SplitGateLikeBroadcastOps
@@ -112,6 +113,7 @@ from deltakit_compile.passes.unitaries_to_named_gates import UnitariesToNamedGat
 # Mapping from pass names to classes for all custom passes
 PASS_MAP: dict[str, type[ModulePass]] = {
     RemapQubits.name: RemapQubits,
+    RemoveDeadGates.name: RemoveDeadGates,
     AddNoise.name: AddNoise,
     ParalleliseCircuit.name: ParalleliseCircuit,
     SerialiseCircuit.name: SerialiseCircuit,
