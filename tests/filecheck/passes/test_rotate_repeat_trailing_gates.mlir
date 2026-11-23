@@ -35,6 +35,27 @@ builtin.module {
 // CHECK-NEXT:          }
 // CHECK-NEXT:          qref.gate<#qcore.gate.h> (%q)
 
+// Rotated past a detector: the round ends with a detector after the basis
+// change, so the gate is not the last operation of the body. A detector refers to
+// measurement records rather than qubits, so the search for the trailing gate
+// walks past it, and the detector stays at the end of the body.
+        qstruct.repeat<3> () -> {
+            qref.reset<Z> (%q)
+            %md = qref.measure<Z>(%q) -> i1
+            qref.gate<#qcore.gate.h> (%q)
+            %d = qec.detector<[0.0, 0.0]> (%md)
+            qstruct.yield
+        }
+// CHECK-NEXT:          qref.gate<#qcore.gate.h> (%q)
+// CHECK-NEXT:          qstruct.repeat<3> () -> {
+// CHECK-NEXT:              qref.gate<#qcore.gate.h> (%q)
+// CHECK-NEXT:              qref.reset<Z> (%q)
+// CHECK-NEXT:              %md = qref.measure<Z> (%q) -> i1
+// CHECK-NEXT:              %d = qec.detector<[0.0, 0.0]> (%md)
+// CHECK-NEXT:              qstruct.yield
+// CHECK-NEXT:          }
+// CHECK-NEXT:          qref.gate<#qcore.gate.h> (%q)
+
 // Not rotated: S is not its own inverse, so replacing (B S)^N with
 // S (S B)^N S would change the circuit. This case has no CHECK-NOT because the
 // CHECK-NEXT sequence below already pins the loop as unchanged.
@@ -124,6 +145,27 @@ builtin.module {
 // CHECK-NEXT:              qref.reset<Z> (%qj)
 // CHECK-NEXT:              qref.gate<#qcore.gate.h> (%qj)
 // CHECK-NEXT:              qstruct.yield %qj : !qcore.qubit
+// CHECK-NEXT:          }
+
+// Not rotated: the last operation on a qubit is an X on %r2, after the H on %qk.
+// The search for the trailing gate stops at it rather than walk past it to the
+// H, because inside this loop %r2 and %qk name the same qubit, and moving the H
+// across the X would change the circuit.
+        %r3 = qstruct.repeat<3> (%r2 : !qcore.qubit) -> !qcore.qubit {
+        ^bb3(%qk : !qcore.qubit):
+            qref.reset<Z> (%qk)
+            %mk = qref.measure<Z>(%qk) -> i1
+            qref.gate<#qcore.gate.h> (%qk)
+            qref.gate<#qcore.gate.x> (%r2)
+            qstruct.yield %qk : !qcore.qubit
+        }
+// CHECK-NEXT:          %r3 = qstruct.repeat<3> (%r2 : !qcore.qubit) -> !qcore.qubit {
+// CHECK-NEXT:          ^bb3(%qk: !qcore.qubit):
+// CHECK-NEXT:              qref.reset<Z> (%qk)
+// CHECK-NEXT:              %mk = qref.measure<Z> (%qk) -> i1
+// CHECK-NEXT:              qref.gate<#qcore.gate.h> (%qk)
+// CHECK-NEXT:              qref.gate<#qcore.gate.x> (%r2)
+// CHECK-NEXT:              qstruct.yield %qk : !qcore.qubit
 // CHECK-NEXT:          }
 
         qstruct.yield %q : !qcore.qubit

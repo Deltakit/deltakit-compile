@@ -4,7 +4,7 @@
 from typing_extensions import override
 from xdsl.context import Context
 from xdsl.dialects.builtin import ModuleOp
-from xdsl.ir import Block, BlockArgument, SSAValue
+from xdsl.ir import Block, BlockArgument, Operation, SSAValue
 from xdsl.passes import ModulePass
 from xdsl.pattern_rewriter import (
     PatternRewriter,
@@ -63,6 +63,25 @@ def _reset_follows_rotation(block: Block, trailing: GateOp) -> bool:
     return False
 
 
+def _last_quantum_op(yield_op: Operation) -> Operation | None:
+    """The last operation before the yield that may act on a qubit.
+
+    Operations with no qubit or register operand and no region, such as detectors and observables,
+    refer to measurement records rather than qubits, so the search walks past them. It stops at the
+    first operation that touches any qubit, whichever qubit that is: since two values can name the
+    same qubit, a gate on another value cannot be assumed to commute with the one before it.
+    """
+    current = yield_op.prev_op
+    while current is not None and not current.regions:
+        if any(
+            isinstance(operand.type, qcore.QubitType | qcore.QubitRegType)
+            for operand in current.operands
+        ):
+            return current
+        current = current.prev_op
+    return current
+
+
 class _RotateTrailingGatePattern(RewritePattern):
     """Moves a self-inverse trailing gate from the end of a repeat body to its start.
 
@@ -71,20 +90,20 @@ class _RotateTrailingGatePattern(RewritePattern):
 
         (B G)^N
 
-    Since `G G = I`, that is the same circuit as
+    When `G G = I`, that is the same circuit as
 
         G (G B)^N G
 
     which is a copy of `G` before the loop, a body starting with `G` instead of ending with it, and
-    a copy of `G` after the loop. The gate count goes from N to 2, and the one now at the start of
-    the body sits directly before the reset that opens the round, where `DeadGateBeforeReset`
-    removes it.
+    a copy of `G` after the loop. The `G` now at the start of the body sits directly before the
+    reset that opens the round, where `DeadGateBeforeReset` can remove it, and then the gate count
+    goes from N to 2.
 
     The two copies left outside the loop are dead in the same sense but are not removed here, since
     that needs a pattern that looks across the loop boundary.
 
     The rotation is only applied when the gate would land directly before such a reset. Without
-    that, the body keeps its N copies and the loop gains two more.
+    that, the body keeps its N copies and the loop would gain two more.
 
     When the gate acts on a qubit the loop carries as a block argument, the copies use the matching
     iter arg and result instead, which name the same qubit outside the body. A gate acting on a
@@ -95,7 +114,7 @@ class _RotateTrailingGatePattern(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: RepeatOp, rewriter: PatternRewriter) -> None:
         block = op.body.block
-        trailing = op.yield_op.prev_op
+        trailing = _last_quantum_op(op.yield_op)
 
         if not isinstance(trailing, GateOp):
             return
