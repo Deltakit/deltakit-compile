@@ -90,6 +90,14 @@ builtin.module {
         %mb1 = qref.measure<X>(%qb1) -> i1
         %mb2 = qref.measure<X>(%qb2) -> i1
         qref.reset<X> (%qa1, %qa2)
+
+// Not removed: the operation between the gate and the reset takes the whole
+// register and no single qubit. It has no qubit operand, so the alias check
+// alone would see it touch nothing and walk past it, but it may act on any qubit
+// of the register. The check for register operands is what stops the walk.
+        qref.gate<#qcore.gate.x> (%qa1, %qa2)
+        "test.op"(%qreg) : (!qcore.qubit_reg<2>) -> ()
+        qref.reset<X> (%qa1, %qa2)
         qstruct.yield %qreg : !qcore.qubit_reg<2>
     }
 // CHECK-NEXT:      %reg = qcore.alloc_qubit -> !qcore.qubit_reg<2>
@@ -100,6 +108,9 @@ builtin.module {
 // CHECK-NEXT:          qref.gate<#qcore.gate.x> (%qa1, %qa2)
 // CHECK-NEXT:          %mb1 = qref.measure<X> (%qb1) -> i1
 // CHECK-NEXT:          %mb2 = qref.measure<X> (%qb2) -> i1
+// CHECK-NEXT:          qref.reset<X> (%qa1, %qa2)
+// CHECK-NEXT:          qref.gate<#qcore.gate.x> (%qa1, %qa2)
+// CHECK-NEXT:          "test.op"(%qreg) : (!qcore.qubit_reg<2>) -> ()
 // CHECK-NEXT:          qref.reset<X> (%qa1, %qa2)
 // CHECK-NEXT:          qstruct.yield %qreg : !qcore.qubit_reg<2>
 // CHECK-NEXT:      }
