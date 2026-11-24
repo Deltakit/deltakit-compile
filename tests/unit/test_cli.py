@@ -6,7 +6,6 @@ from pathlib import Path
 
 import pytest
 import typer
-from deltakit_stim import Circuit
 from packaging import version
 from pytest_mock import MockerFixture, MockType
 from typer.testing import CliRunner
@@ -14,6 +13,7 @@ from xdsl.dialects.builtin import ModuleOp
 
 from deltakit_compile.cli import app
 from deltakit_compile.constants import DIST_NAME
+from deltakit_compile.interop.deltakit_stim import Circuit
 
 # Typer >=0.26 removed mix_stderr and made the behaviour where it's false the default, so we have to
 # do this to support Typer from both before and after that change

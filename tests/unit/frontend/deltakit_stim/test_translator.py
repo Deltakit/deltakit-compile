@@ -1,11 +1,11 @@
 """Tests for translating Deltakit-Stim to the stim and deltakit-stim dialects"""
 
 import pytest
-from deltakit_stim import Circuit
 
 from deltakit_compile.dialects.stim import CliffordGateOp, QubitAllocOp, QubitCoordsOp, ResetGateOp
 from deltakit_compile.exceptions import InvalidInputStimCircuit
 from deltakit_compile.frontend.deltakit_stim._translator import DeltakitStimTranslator
+from deltakit_compile.interop.deltakit_stim import Circuit
 
 """
 Note that most tests of the Deltakit-Stim translator with valid circuit input are done as part of

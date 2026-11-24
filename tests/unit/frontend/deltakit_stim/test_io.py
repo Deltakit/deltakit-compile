@@ -1,6 +1,5 @@
 """Tests for the Stim frontend API."""
 
-from deltakit_stim import Circuit
 from xdsl.dialects.arith import Arith
 from xdsl.dialects.builtin import Builtin
 from xdsl.dialects.scf import Scf
@@ -19,6 +18,7 @@ from deltakit_compile.frontend.deltakit_stim.io import (
     deltakit_stim_dialect_to_circuit,
     physical_circuit_ir_to_deltakit_stim_circuit,
 )
+from deltakit_compile.interop.deltakit_stim import Circuit
 
 
 def test_deltakit_stim_context_dialect_loading() -> None:

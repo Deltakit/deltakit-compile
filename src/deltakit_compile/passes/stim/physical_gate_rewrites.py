@@ -103,7 +103,7 @@ def qcore_gate_to_deltakit_stim_enum(
 
 # Named qcore gates with a dedicated, fixed-identity ncstim opcode that stim itself has no
 # equivalent for (unlike e.g. X or CX, T/T_DAG/CCX/CCZ/CH are non-Clifford, so they're never in
-# qcore_gate_to_lestim_enum's gate set).
+# qcore_gate_to_deltakit_stim_enum's gate set).
 _STANDARD_GATE_TO_NON_CLIFFORD: Final[dict[qcore.GateAttribute, NonCliffordGateEnum]] = {
     qcore.TGateAttr(): NonCliffordGateEnum.T,
     qcore.TGateAttr.dag(): NonCliffordGateEnum.T_DAG,
@@ -138,14 +138,14 @@ def qcore_gate_to_ncstim_op(
     qubits: Sequence[SSAValue],
     raise_on_unsupported: bool = True,
 ) -> _NCSTIM_OP | None:
-    """Map a qcore gate attribute to a physical operation, covering the lestim plus ncstim
+    """Map a qcore gate attribute to a physical operation, covering the deltakit_stim plus ncstim
     instructions to pass to ``GatePattern``.
 
     Gates already representable in plain stim (X, H, S, CX, SWAP, ...) are tried first, via
-    ``qcore_gate_to_lestim_enum``: an X gate should always come out as a plain lestim ``X``, never
-    as an ncstim rotation, even though the latter is also a valid representation. Only gates lestim
-    can't represent progress through ncstim's own forms, tried in increasing generality (most
-    specific first):
+    ``qcore_gate_to_deltakit_stim_enum``: an X gate should always come out as a plain deltakit_stim
+    ``X``, never as an ncstim rotation, even though the latter is also a valid representation. Only
+    gates deltakit_stim can't represent progress through ncstim's own forms, tried in increasing
+    generality (most specific first):
 
     1. Named non-Clifford gates with a dedicated, fixed-identity ncstim opcode (T, T_DAG, CCX,
        CCZ, CH) map to ``NonCliffordGateOp`` via ``_STANDARD_GATE_TO_NON_CLIFFORD``.
@@ -170,9 +170,9 @@ def qcore_gate_to_ncstim_op(
             arbitrary multi-qubit unitary synthesis) and `raise_on_unsupported` is True.
     """
     if (
-        lestim_enum := qcore_gate_to_deltakit_stim_enum(gate, raise_on_unsupported=False)
+        deltakit_stim_enum := qcore_gate_to_deltakit_stim_enum(gate, raise_on_unsupported=False)
     ) is not None:
-        return stim.CliffordGateOp(lestim_enum, qubits)
+        return stim.CliffordGateOp(deltakit_stim_enum, qubits)
 
     if (non_clifford_gate := _STANDARD_GATE_TO_NON_CLIFFORD.get(gate)) is not None:
         return NonCliffordGateOp(non_clifford_gate, qubits)

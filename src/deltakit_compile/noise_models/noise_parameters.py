@@ -10,7 +10,6 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from typing import Final, cast
 
-from deltakit_stim import CircuitInstruction
 from typing_extensions import override
 from xdsl.ir import SSAValue
 
@@ -24,6 +23,7 @@ from deltakit_compile.dialects.stim import (
     QubitAllocOp,
 )
 from deltakit_compile.exceptions import NoiseWarning
+from deltakit_compile.interop.deltakit_stim import CircuitInstruction
 from deltakit_compile.shared.deltakit_stim.gates import (
     DeltakitStimGateEnum,
     DeltakitStimQuantumOpEnum,

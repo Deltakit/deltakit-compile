@@ -1,6 +1,3 @@
-# This file contains information which is proprietary to Riverlane Limited
-# ("Riverlane") and is Riverlane Confidential Information.
-
 # (c) Copyright Riverlane 2026. All rights reserved.
 """Exception tests for find-detectors pass (functional testing done using filecheck)."""
 

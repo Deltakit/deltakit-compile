@@ -480,7 +480,7 @@ def test_find_forward_ssas_circuit_arg_to_result(xdsl_context: Context):
     assert alloc_ops
     assert circuit_ops
 
-    qubit_ssa = alloc_ops[0].results[0]
+    qubit_ssa = alloc_ops[0].result[0]
     circuit_result = circuit_ops[0].res[0]
 
     forward_ssas, terminal_uses = find_forward_ssas(qubit_ssa)
@@ -512,7 +512,7 @@ def test_find_forward_ssas_circuit_containing_repeat(xdsl_context: Context):
     non_terminal_result = circuit_ops[0].res[0]
     terminal_result = circuit_ops[1].res[0]
 
-    forward_ssas, terminal_uses = find_forward_ssas(alloc_ops[0].results[0])
+    forward_ssas, terminal_uses = find_forward_ssas(alloc_ops[0].result[0])
     assert non_terminal_result not in forward_ssas
     assert terminal_result in forward_ssas
     assert len(terminal_uses) == 1
@@ -712,7 +712,7 @@ def test_strict_traversal_preserves_concatenate_and_split_offsets(xdsl_context: 
     split = next(op for op in module.walk() if isinstance(op, qcore.SplitOp))
 
     equivalent, blocking_uses, blocking_ops = find_equivalent_qubit_ssas(
-        cast(OpResult[QubitRegType], regs[1].results[0]), 1
+        cast(OpResult[QubitRegType], regs[1].result[0]), 1
     )
 
     assert TrackedQubit(concat.out_reg, 3) in equivalent

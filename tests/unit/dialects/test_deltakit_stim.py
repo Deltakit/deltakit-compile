@@ -1,6 +1,5 @@
 """Tests for the Deltakit-Stim extension dialect for Stim."""
 
-from importlib.metadata import version
 from typing import Final
 
 import pytest
@@ -10,9 +9,10 @@ from xdsl.utils.exceptions import VerifyException
 
 from deltakit_compile.dialects.deltakit_stim import HeraldLeakageEventOp
 from deltakit_compile.dialects.stim import QubitAllocOp
+from deltakit_compile.interop.deltakit_stim import __version__ as deltakit_stim_version
 from tests.unit.dialects.conftest import check_asm_roundtrip, check_stim_roundtrip
 
-DELTAKIT_STIM_SUPPORTS_TAGS: Final[bool] = Version(version("deltakit_stim")) >= Version("1.16.0")
+DELTAKIT_STIM_SUPPORTS_TAGS: Final[bool] = Version(deltakit_stim_version) >= Version("1.16.0")
 DELTAKIT_STIM_TAGS_MARK = (
     ()
     if DELTAKIT_STIM_SUPPORTS_TAGS

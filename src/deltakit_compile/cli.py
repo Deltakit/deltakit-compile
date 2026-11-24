@@ -9,7 +9,6 @@ from pathlib import Path
 from typing import Annotated
 
 import typer
-from deltakit_stim import Circuit
 from typer.core import TyperGroup
 from typing_extensions import override
 from xdsl.parser import Parser
@@ -20,6 +19,7 @@ from deltakit_compile.frontend.deltakit_stim.io import (
     deltakit_stim_context,
     deltakit_stim_dialect_to_circuit,
 )
+from deltakit_compile.interop.deltakit_stim import Circuit
 from deltakit_compile.pass_runner import ArgumentDict, PassRunner
 
 

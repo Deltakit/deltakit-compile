@@ -67,7 +67,7 @@ def test_non_clifford_gate_op_print_stim(
 ) -> None:
     """Test that NonCliffordGateOp prints as the expected tsim/clifft instruction."""
     used_allocs = [qubit_allocs[i] for i in sorted(set(target_indices))]
-    targets = [qubit_allocs[i].results[0] for i in target_indices]
+    targets = [qubit_allocs[i].res for i in target_indices]
     gate = NonCliffordGateOp(gate_type, targets)
     module_op = ModuleOp([*used_allocs, gate])
     assert to_stim(module_op) == "\n" + expected
@@ -140,7 +140,7 @@ def test_rotation_gate_op_print_stim(
     """Test that RotationGateOp prints as the expected tsim/clifft instruction, respecting the
     documented precedence between the axis-rotation, special-angle, and generic R_PAULI forms."""
     used_allocs = [qubit_allocs[i] for i in sorted(set(target_indices))]
-    targets = [qubit_allocs[i].results[0] for i in target_indices]
+    targets = [qubit_allocs[i].res for i in target_indices]
     rot = RotationGateOp(pauli_modifiers, angle, targets)
     module_op = ModuleOp([*used_allocs, rot])
     assert to_stim(module_op) == "\n" + expected
@@ -159,7 +159,7 @@ def test_u3_gate_op_print_stim(
     """Test that U3GateOp prints as the expected tsim U3 instruction, including the broadcast
     case where the same gate is applied independently to multiple target qubits."""
     used_allocs = [qubit_allocs[i] for i in sorted(set(target_indices))]
-    targets = [qubit_allocs[i].results[0] for i in target_indices]
+    targets = [qubit_allocs[i].res for i in target_indices]
     u3 = U3GateOp(0.5, -0.5, 0.5, targets)
     module_op = ModuleOp([*used_allocs, u3])
     assert to_stim(module_op) == "\n" + expected
@@ -176,7 +176,7 @@ def test_non_clifford_gate_op_rejects_duplicate_targets(
 ) -> None:
     """Test that NonCliffordGateOp rejects targeting the same qubit more than once, mirroring
     tsim/clifft's own rejection of e.g. `CH 3 3` at parse time."""
-    qubit = qubit_allocs[0].results[0]
+    qubit = qubit_allocs[0].res
     with pytest.raises(VerifyException, match="targets the same qubit more than once"):
         NonCliffordGateOp(NonCliffordGateEnum.CH, [qubit, qubit]).verify()
 
@@ -190,7 +190,7 @@ def test_rotation_gate_op_verification() -> None:
 def test_rotation_gate_op_rejects_duplicate_targets(qubit_allocs: list[QubitAllocOp]) -> None:
     """Test that RotationGateOp rejects targeting the same qubit more than once, mirroring
     tsim/clifft's own rejection of e.g. `R_XX(0.5) 3 3` at parse time."""
-    qubit = qubit_allocs[0].results[0]
+    qubit = qubit_allocs[0].res
     with pytest.raises(VerifyException, match="targets the same qubit more than once"):
         RotationGateOp(
             [PauliAttr(PauliOperatorEnum.X), PauliAttr(PauliOperatorEnum.X)],
@@ -203,7 +203,7 @@ def test_rotation_gate_op_pauli_modifiers_length_mismatch(
     qubit_allocs: list[QubitAllocOp],
 ) -> None:
     """Test that RotationGateOp requires exactly one pauli modifier per targeted qubit."""
-    qubit = qubit_allocs[0].results[0]
+    qubit = qubit_allocs[0].res
     with pytest.raises(
         VerifyException,
         match="A rotation gate must have the same number of pauli modifiers as targeted qubits",
