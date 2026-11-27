@@ -1,0 +1,16 @@
+/* Style overrides for the deltakit-compile documentation, loaded on top of the theme. */
+
+/*
+ * Sidebar entries that lead to another Deltakit documentation site end in an
+ * external-link icon. Line it up with the chevrons of the sections that
+ * expand, and give it the same muted colour.
+ */
+#left-sidebar a.reference.external {
+  justify-content: space-between;
+}
+
+#left-sidebar a.reference.external > svg {
+  flex-shrink: 0;
+  margin-inline: 2px;
+  color: var(--color-muted-foreground);
+}

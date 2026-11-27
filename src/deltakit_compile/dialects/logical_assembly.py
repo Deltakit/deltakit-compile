@@ -293,14 +293,17 @@ class SurfaceCodeBasePatch(BasePatch):
     @classmethod
     @override
     def parse_parameters(cls, parser: AttrParser) -> Sequence[Attribute]:
-        """Parse surface code patch:
-        log_asm.patch.???`<`
-            `size` `=` `(` $size.width `,` $size.height `)`
-            (   `,`
-                `location` `=` `(` $placement.x^ `,` $placement.y `)` `,`
-                `orient` `=` $placement.orientation
-            )?
-        `>`
+        """Parse the parameters of a surface code patch.
+
+        The parameters are parsed in the form::
+
+            log_asm.patch.???`<`
+                `size` `=` `(` $size.width `,` $size.height `)`
+                (   `,`
+                    `location` `=` `(` $placement.x^ `,` $placement.y `)` `,`
+                    `orient` `=` $placement.orientation
+                )?
+            `>`
         """
         with parser.in_angle_brackets():
             parser.parse_keyword("size")

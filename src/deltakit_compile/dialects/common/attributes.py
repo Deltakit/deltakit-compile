@@ -489,11 +489,10 @@ class OptPlainIntAttr(CustomDirective):
     @classmethod
     def use(cls, argument: str) -> str:
         """Returns the custom assembly format fragment that will call this method on the argument
-        given. Used inside an Operation's assembly format definition eg:
-        ```
+        given. Used inside an Operation's assembly format definition eg::
+
             assembly_format = f"... {OptPlainIntAttr.use('$my_int')} ..."
             custom_directives = (OptPlainIntAttr,)
-        ```
         """
         return f"custom<{cls.__name__}>({argument})"
 
@@ -521,11 +520,10 @@ class PlainIntAttr(CustomDirective):
     @classmethod
     def use(cls, argument: str) -> str:
         """Returns the custom assembly format fragment that will call this method on the argument
-        given. Used inside an Operation's assembly format definition eg:
-        ```
+        given. Used inside an Operation's assembly format definition eg::
+
             assembly_format = f"... {PlainIntAttr.use('$my_int')} ..."
             custom_directives = (PlainIntAttr,)
-        ```
         """
         return f"custom<{cls.__name__}>({argument})"
 
@@ -563,11 +561,10 @@ class PlainArrayOfIntAttrDirective(CustomDirective):
     @classmethod
     def use(cls, argument: str) -> str:
         """Returns the custom assembly format fragment that will call this method on the argument
-        given. Used inside an Operation's assembly format definition eg:
-        ```
+        given. Used inside an Operation's assembly format definition eg::
+
             assembly_format = f"... {PlainArrayOfIntAttrDirective.use('$my_array')} ..."
             custom_directives = (PlainArrayOfIntAttrDirective,)
-        ```
         """
         return f"custom<{cls.__name__}>({argument})"
 
@@ -784,11 +781,10 @@ class PlainFloat64Directive(CustomDirective):
     @classmethod
     def use(cls, argument: str) -> str:
         """Returns the custom assembly format fragment that will call this method on the argument
-        given. Used inside an Operation's assembly format definition eg:
-        ```
+        given. Used inside an Operation's assembly format definition eg::
+
             assembly_format = f"... {PlainFloat64Directive.use('$my_float')} ..."
             custom_directives = (PlainFloat64Directive,)
-        ```
         """
         return f"custom<{cls.__name__}>({argument})"
 
@@ -829,11 +825,10 @@ class OptPlainFloat64Directive(CustomDirective):
     @classmethod
     def use(cls, argument: str) -> str:
         """Returns the custom assembly format fragment that will call this method on the argument
-        given. Used inside an Operation's assembly format definition eg:
-        ```
+        given. Used inside an Operation's assembly format definition eg::
+
             assembly_format = f"... {OptPlainFloat64Directive.use('$my_float')} ..."
             custom_directives = (OptPlainFloat64Directive,)
-        ```
         """
         return f"custom<{cls.__name__}>({argument})"
 
@@ -871,11 +866,10 @@ class PlainArrayOfFloat64Directive(CustomDirective):
     @classmethod
     def use(cls, argument: str) -> str:
         """Returns the custom assembly format fragment that will call this method on the argument
-        given. Used inside an Operation's assembly format definition eg:
-        ```
+        given. Used inside an Operation's assembly format definition eg::
+
             assembly_format = f"... {PlainArrayOfFloat64Directive.use('$my_array')} ..."
             custom_directives = (PlainArrayOfFloat64Directive,)
-        ```
         """
         return f"custom<{cls.__name__}>({argument})"
 
@@ -926,11 +920,10 @@ class OptPlainArrayOfFloat64Directive(CustomDirective):
     @classmethod
     def use(cls, argument: str) -> str:
         """Returns the custom assembly format fragment that will call this method on the argument
-        given. Used inside an Operation's assembly format definition eg:
-        ```
+        given. Used inside an Operation's assembly format definition eg::
+
             assembly_format = f"... {OptPlainArrayOfFloat64Directive.use('$my_array')} ..."
             custom_directives = (OptPlainArrayOfFloat64Directive,)
-        ```
         """
         return f"custom<{cls.__name__}>({argument})"
 
@@ -958,11 +951,10 @@ class PlainFloatDataDirective(CustomDirective):
     @classmethod
     def use(cls, argument: str) -> str:
         """Returns the custom assembly format fragment that will call this method on the argument
-        given. Used inside an Operation's assembly format definition eg:
-        ```
+        given. Used inside an Operation's assembly format definition eg::
+
             assembly_format = f"... {PlainFloatDataDirective.use('$my_float')} ..."
             custom_directives = (PlainFloatDataDirective,)
-        ```
         """
         return f"custom<{cls.__name__}>({argument})"
 
@@ -1004,11 +996,10 @@ class OptPlainFloatDataDirective(CustomDirective):
     @classmethod
     def use(cls, argument: str) -> str:
         """Returns the custom assembly format fragment that will call this method on the argument
-        given. Used inside an Operation's assembly format definition eg:
-        ```
+        given. Used inside an Operation's assembly format definition eg::
+
             assembly_format = f"... {OptPlainFloatDataDirective.use('$my_float')} ..."
             custom_directives = (OptPlainFloatDataDirective,)
-        ```
         """
         return f"custom<{cls.__name__}>({argument})"
 
@@ -1048,11 +1039,10 @@ class PlainArrayOfFloatDataDirective(CustomDirective):
     @classmethod
     def use(cls, argument: str) -> str:
         """Returns the custom assembly format fragment that will call this method on the argument
-        given. Used inside an Operation's assembly format definition eg:
-        ```
+        given. Used inside an Operation's assembly format definition eg::
+
             assembly_format = f"... {PlainArrayOfFloatDataDirective.use('$my_array')} ..."
             custom_directives = (PlainArrayOfFloatDataDirective,)
-        ```
         """
         return f"custom<{cls.__name__}>({argument})"
 
@@ -1105,10 +1095,9 @@ class OptPlainArrayOfFloatDataDirective(CustomDirective):
     @classmethod
     def use(cls, argument: str) -> str:
         """Returns the custom assembly format fragment that will call this method on the argument
-        given. Used inside an Operation's assembly format definition eg:
-        ```
+        given. Used inside an Operation's assembly format definition eg::
+
             assembly_format = f"... {OptPlainArrayOfFloatDataDirective.use('$my_array')} ..."
             custom_directives = (OptPlainArrayOfFloatDataDirective,)
-        ```
         """
         return f"custom<{cls.__name__}>({argument})"

@@ -459,6 +459,7 @@ def find_all_predecessor_and_successor_ssas(
 
     This function is similar to ``find_forward_ssas`` and ``find_backward_ssas`` but differs in two
     core points:
+
     1. It returns all the SSA values, not only the ones that resulted in the exploration being
        blocked.
     2. It performs a bidirectional traversal.
@@ -472,6 +473,7 @@ def find_all_predecessor_and_successor_ssas(
 
     Returns:
         A tuple composed of:
+
         - the set of SSA values that are potential predecessors or successors of ``ssa``, including
           ``ssa``.
         - the set of uses that blocked the forward traversal (guaranteed to be non-structural
@@ -511,6 +513,7 @@ class TrackedQubit:
     """Dataclass identifying a qubit.
 
     This class can represent a qubit in two ways:
+
     - either ``self.ssa.type`` is a ``qcore.QubitType()``, in which case ``self.index`` is ``None``
       and the qubit is represented by ``self.ssa``.
     - or ``self.ssa.type`` is a ``qcore.QubitRegType()``, in which case ``self.index`` is not

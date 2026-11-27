@@ -1,5 +1,5 @@
 # (c) Copyright Riverlane 2025-2026. All rights reserved.
-"""Pass that splits measurement tensors (`tensor<3xi1>`) into individual `i1`s."""
+"""Pass that splits measurement tensors (`tensor<3xi1>`) into individual `i1` values."""
 
 import itertools
 from collections.abc import Sequence
@@ -296,7 +296,7 @@ class _RewriteCircuitOpResult(RewritePattern):
 
 @dataclass(frozen=True)
 class SplitMeasurementTensors(ModulePass):
-    """A pass that splits measurement tensors (`tensor<3xi1>`) into individual `i1`s.
+    """A pass that splits measurement tensors (`tensor<3xi1>`) into individual `i1` values.
 
     The pass treats all i1 tensors as being measurement tensors to be broken down. It also doesn't
     handle tensors of unknown length (`tensor<?xi1>`), throwing an error if these are present.

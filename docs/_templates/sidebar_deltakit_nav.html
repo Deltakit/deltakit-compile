@@ -1,0 +1,18 @@
+{#- Sidebar shared by the Deltakit documentation sites: see `_ext/deltakit_nav.py`.
+
+The entry this site owns links to its home page and expands into its table of contents. The theme
+makes a sidebar link collapsible only when its list of children follows it directly, so nothing
+may separate the link from the table of contents. Every other entry links to another site. -#}
+<nav class="table w-full min-w-full my-6 lg:my-8">
+  <ul>
+    {%- for entry in deltakit_nav %}
+    {%- if entry.key == deltakit_nav_current %}
+    <li class="toctree-l1 current"><a class="reference internal{% if pagename == root_doc %} current{% endif %}" href="{{ pathto(root_doc) }}">{{ entry.title }}</a>{{ toctree(titles_only=true, collapse=False, includehidden=true) }}</li>
+    {%- else %}
+    <li class="toctree-l1">
+      <a class="reference external" href="{{ entry.url }}">{{ entry.title }}<svg xmlns="http://www.w3.org/2000/svg" height="14" width="14" viewBox="0 96 960 960" fill="currentColor" stroke="none" aria-hidden="true"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z" /></svg></a>
+    </li>
+    {%- endif %}
+    {%- endfor %}
+  </ul>
+</nav>

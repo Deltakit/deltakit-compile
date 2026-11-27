@@ -72,6 +72,15 @@ security = [
   "pip-audit>=2.8.0, <3",
   "ochrona >=2.0.2, <3",
 ]
+docs = [
+  "sphinx >=8.1, <10",
+  "myst-nb >=1.2, <2",
+  "sphinx-design >=0.6, <0.8",
+  "sphinxawesome-theme >=5.3, <6.0.7",
+  "ipykernel >=6.29, <8",
+  # Used by the stim interoperability example in the compilation tutorials.
+  "stim >=1.14, <2",
+]
 release = [
   "python-semantic-release >=10.6.1, <11",
   "packaging >=25.0, <27",
@@ -84,6 +93,7 @@ dev = [
   { include-group = "security" },
   "pre-commit >=4.2, <5",
   "validate-pyproject >=0.24.1, <0.26.0",
+  "rust-just",
 ]
 
 [project.scripts]

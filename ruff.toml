@@ -52,6 +52,7 @@ include = [
     "examples/**/*.py",
     "examples/**/*.ipynb",
     ".github/workflows/scripts/**/*.py",
+    "docs/**/*.py",
 ]
 
 # Same as Black, with extended line length.
@@ -134,6 +135,16 @@ ignore = [
 "tests/**/*.py" = [
     # Tests don't need copyright notices
     "CPY001",
+]
+"docs/conf.py" = [
+    # The Sphinx configuration doesn't need a copyright notice
+    "CPY001",
+    # Sphinx loads this file as a standalone script, not as part of a package
+    "INP001",
+]
+"docs/_ext/*.py" = [
+    # Sphinx imports local extensions from a path entry, not as part of a package
+    "INP001",
 ]
 # Invalid function name. Some functions are named with capital letters to match mathematical
 # notation, especially Pauli operators. Ignore for test files which have functions named like this.
