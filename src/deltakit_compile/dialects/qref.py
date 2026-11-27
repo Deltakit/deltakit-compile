@@ -251,10 +251,13 @@ class MeasureOp(GateLikeOp):
             `(` $qubits `)` attr-dict? `->` type($measurements)
 
         where each pauli-string is [XYZ]+ and if it not given inside the `[` ... `]` then it is
-        assumed to be the same Pauli string for each result.
-        eg.
-            `... = qref.measure<XX> (%1, %2, %3, %4) -> i1, i1` is the same as
-            `... = qref.measure<[XX, XX]> (%1, %2, %3, %4) -> i1, i1`
+        assumed to be the same Pauli string for each result. For example::
+
+            ... = qref.measure<XX> (%1, %2, %3, %4) -> i1, i1
+
+        is the same as::
+
+            ... = qref.measure<[XX, XX]> (%1, %2, %3, %4) -> i1, i1
         """
         proto_paulis = None
         paulis = None

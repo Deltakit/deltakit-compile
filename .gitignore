@@ -30,6 +30,11 @@ container
 # Jupyter Notebook
 *.ipynb_checkpoints
 
+# Sphinx documentation build output
+docs/_build
+# API reference pages that autosummary generates on each build
+docs/api/generated
+
 # lit/filecheck tmp Output folders and files
 tests/filecheck/**/Output
 .lit_test_times.txt

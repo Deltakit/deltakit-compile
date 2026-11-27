@@ -112,7 +112,7 @@ class FieldPathSpec:
 
     When generating the pass from a `Configuration` `my_option` will be taken from
     `config.sub_conf1.sub_conf2.my_option`. `config.sub_conf1` and `config.sub_conf1.sub_conf2`
-    must both be `Configuration`s.
+    must both be `Configuration` instances.
 
     A `field_name` argument can also be passed that overrides the field searched for in the config,
     (which by default is the same name as the field in the `ConfigurablePass`) for example::
@@ -271,8 +271,8 @@ class ConfigurablePass(_ConfigurablePassBase, Generic[ConfigurationT_contra]):
         This classmethod inspects this class' dataclass fields and for each one that should be
         inited it extracts the field of the same name in the given `config`.
         Annotated a field in `cls` using `FieldPathSpec` will define how to find that
-        field within a nested structure of `Configuration`s inside `config`.
-        `property` methods defined in `Configuration`s are also traversed and used to fill fields
+        field within a nested structure of `Configuration` instances inside `config`.
+        `property` methods defined in a `Configuration` are also traversed and used to fill fields
         of this pass as if they were regular fields.
         """
 
@@ -337,7 +337,7 @@ class ConfigurablePass(_ConfigurablePassBase, Generic[ConfigurationT_contra]):
         """Get the tuple of passes that when run in order execute this pass as per `config`.
 
         For most passes this will return an instance of this class configured with `config` but for
-        `ConfigurablePipeline`es this will return the sequence of inner passes that make up that
+        a `ConfigurablePipeline` this will return the sequence of inner passes that make up that
         pipeline."""
         return (cls.from_configuration(config),)
 
@@ -435,7 +435,7 @@ def _is_subtype(subtype: TypeForm[type], supertype: TypeForm[type]) -> bool:
 
 @dataclass_transform(frozen_default=True)
 def configurable_pass(cls: ConfiguredPassInvT) -> ConfiguredPassInvT:
-    """Decorator for creating and validating `ConfigurablePass`es. Use on all concrete
+    """Decorator for creating and validating a `ConfigurablePass`. Use on all concrete
     implementations of `ConfigurablePass` to validate the generic `ConfigurationT_contra`
     type is capable of providing the arguments required by the pass class.
 

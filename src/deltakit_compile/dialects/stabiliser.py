@@ -2079,7 +2079,7 @@ class StatePermuteOp(IRDLOperation):
     def invert_permutation(permutation: Sequence[int]) -> list[int]:
         """Get the permutation that undoes the given permutation.
         The input must be a valid permutation - contain all values
-        in [0, |permutation|) exactly once."""
+        in ``[0, len(permutation))`` exactly once."""
         reorder_map = {p: idx for idx, p in enumerate(permutation)}
         if set(reorder_map) != set(range(len(permutation))):
             msg = "Input does not define a valid permutation map"

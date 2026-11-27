@@ -520,8 +520,8 @@ class ModuloIntConstraint(IntConstraint):
     """Constrains ints to have a `value % divisor == remainder` relationship.
 
     This constraint combines multiple sub-constraints together. Initialising this directly is not
-    recommended, use ``ModuloIntConstraint.make_pair`` to create the appropriate ``IntConstraint``s
-    for the value and divisor that will then apply this constraint when verified.
+    recommended, use ``ModuloIntConstraint.make_pair`` to create the appropriate ``IntConstraint``
+    objects for the value and divisor that will then apply this constraint when verified.
     """
 
     is_divisor: bool

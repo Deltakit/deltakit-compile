@@ -9,7 +9,7 @@ def get_all_ssa_values(op: Operation) -> tuple[set[SSAValue], set[SSAValue]]:
     `SSAValue` created by and inside `op`.
 
     Args:
-        op: The Operation to search for `SSAValue`s.
+        op: The Operation to search for `SSAValue` objects.
 
     Returns:
         The set of used `SSAValues` and the set of created `SSAValues`.
